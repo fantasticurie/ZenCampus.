@@ -3,641 +3,590 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>The Yellow Royal Diary - Jurnal Harian Yang Mulia</title>
+    <title>The Yellow Royal Diary</title>
     <style>
-        /* ==============================
-           CSS - Styling & Animasi
-           ============================== */
+        /* === COLOR PALETTE & FONTS === */
         :root {
-            --pastel-yellow: #FFF9E1;
-            --cream: #FFF3E0;
-            --gold: #FBC02D;
-            --maroon: #880E4F;
-            --text-color: #5D4037;
-            --font-main: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; /* Cute, clean font */
+            --bg-yellow: #FFF9C4; /* Pastel Yellow */
+            --sky-blue: #87CEEB; /* Latar halaman 1 */
+            --cream: #FFFDD0; /* Kertas/Perkamen */
+            --gold: #FFD700; /* Aksen pinggiran */
+            --maroon: #800000; /* Teks & Lilin */
+            --text-color: #4A3000; /* Cokelat gelap untuk teks bacaan */
+        }
+
+        @import url('https://fonts.googleapis.com/css2?family=Fredoka:wght@400;600&family=Lora:ital,wght@0,400;0,600;1,400&display=swap');
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
         }
 
         body {
-            margin: 0;
-            padding: 0;
-            background-color: var(--pastel-yellow);
-            font-family: var(--font-main);
+            font-family: 'Fredoka', sans-serif;
+            background-color: var(--bg-yellow);
             color: var(--text-color);
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            min-height: 100vh;
-            overflow-x: hidden;
-        }
-
-        /* Container Utama */
-        #app-container {
-            width: 100%;
-            max-width: 480px; /* Mobile-first width */
+            overflow: hidden; /* Mencegah scroll saat transisi */
             height: 100vh;
             display: flex;
-            flex-direction: column;
-            position: relative;
-            background-color: white; /* Panel putih di dalam bg kuning */
-            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            justify-content: center;
+            align-items: center;
         }
 
-        /* Global Styling untuk Section Halaman */
-        section {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            height: 100%;
-            padding: 2rem;
-            box-sizing: border-box;
+        h1, h2, h3 {
+            font-family: 'Lora', serif;
+            color: var(--maroon);
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        /* === SPA SCREEN TRANSITIONS === */
+        .screen {
             position: absolute;
             top: 0;
             left: 0;
             width: 100%;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
             opacity: 0;
-            visibility: hidden;
-            transition: opacity 0.5s ease-in-out, visibility 0.5s;
-            text-align: center;
+            pointer-events: none;
+            transition: opacity 0.6s ease-in-out, transform 0.6s ease;
+            transform: translateY(20px);
+            padding: 20px;
         }
 
-        /* Menampilkan section aktif */
-        section.active {
+        .screen.active {
             opacity: 1;
-            visibility: visible;
-            position: relative; /* Kembali ke flow normal */
+            pointer-events: auto;
+            transform: translateY(0);
+            z-index: 10;
         }
 
-        /* Global Button Styling */
-        button {
+        /* === BUTTONS === */
+        .btn-royal {
             background-color: var(--gold);
             color: var(--maroon);
             border: 2px solid var(--maroon);
-            border-radius: 20px;
-            padding: 10px 25px;
-            font-size: 1.1rem;
-            font-weight: bold;
+            padding: 12px 24px;
+            font-size: 16px;
+            font-family: 'Fredoka', sans-serif;
+            font-weight: 600;
+            border-radius: 30px;
             cursor: pointer;
-            transition: background-color 0.3s ease, transform 0.2s;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            box-shadow: 0 4px 0 var(--maroon);
+            transition: all 0.2s;
+            margin-top: 20px;
         }
 
-        button:hover {
-            background-color: #fdd835;
-            transform: scale(1.05);
+        .btn-royal:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 0 var(--maroon);
         }
 
-        button:active {
-            transform: scale(0.98);
+        .btn-royal:active {
+            transform: translateY(4px);
+            box-shadow: 0 0 0 var(--maroon);
         }
 
-        /* 1. Halaman Kedatangan (Landing) */
-        #landing-page {
-            background: linear-gradient(to bottom, #81D4FA, #B3E5FC); /* Langit biru cerah */
+        /* === SCREEN 1: LANDING PAGE === */
+        #screen-landing {
+            background: linear-gradient(to bottom, var(--sky-blue) 0%, #E0F7FA 100%);
+        }
+        
+        .castle-emoji {
+            font-size: 80px;
+            margin-bottom: -20px;
+            z-index: 1;
         }
 
-        .castle-bg {
-            font-size: 5rem;
-            margin-bottom: 1rem;
-        }
-
-        #landing-page .parchment-box {
+        .parchment {
             background-color: var(--cream);
-            border: 3px solid var(--gold);
+            border: 4px solid var(--gold);
             border-radius: 15px;
-            padding: 2rem;
-            box-shadow: 0 6px 12px rgba(0,0,0,0.15);
-        }
-
-        #landing-page h1 {
-            color: var(--maroon);
-            margin-bottom: 1.5rem;
-            font-size: 1.8rem;
-        }
-
-        #name-input {
-            width: 80%;
-            padding: 12px;
-            border: 2px solid var(--gold);
-            border-radius: 10px;
-            margin-bottom: 1.5rem;
-            font-size: 1rem;
+            padding: 40px;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
             text-align: center;
-            background-color: white;
+            max-width: 400px;
+            width: 100%;
+            position: relative;
         }
 
-        /* 2. Welcome Screen */
-        #welcome-page {
-            background-color: var(--pastel-yellow);
+        .parchment::before, .parchment::after {
+            content: '📜';
+            position: absolute;
+            font-size: 30px;
+            top: -15px;
         }
+        .parchment::before { left: -15px; }
+        .parchment::after { right: -15px; }
 
-        /* Gerbang Terbuka Animation */
-        .gate-icon {
-            font-size: 6rem;
-            animation: openGate 2s ease-in-out forwards;
-        }
-
-        @keyframes openGate {
-            0% { transform: scaleX(1); opacity: 0; }
-            50% { opacity: 1; }
-            100% { transform: scaleX(0); opacity: 0; visibility: hidden; }
-        }
-
-        #welcome-text {
-            font-size: 1.6rem;
+        input[type="text"] {
+            width: 100%;
+            padding: 12px;
+            border: 2px dashed var(--gold);
+            border-radius: 8px;
+            background: transparent;
+            font-family: 'Lora', serif;
+            font-size: 18px;
+            text-align: center;
             color: var(--maroon);
-            font-weight: bold;
-            opacity: 0;
-            animation: fadeInText 1s ease-in-out 1.5s forwards; /* Muncul setelah gerbang mulai hilang */
+            outline: none;
         }
 
-        @keyframes fadeInText {
-            to { opacity: 1; }
-        }
-
-        /* 3. Cek Suasana Hati (Mood Check) */
-        #mood-page {
-            background-color: var(--pastel-yellow);
-        }
-
-        .mood-options {
+        /* === SCREEN 2: WELCOME === */
+        .gate-container {
+            font-size: 100px;
             display: flex;
-            gap: 1.5rem;
-            margin: 2rem 0;
+            gap: 5px;
+            margin-bottom: 20px;
+        }
+
+        .gate {
+            transition: transform 2s ease-in-out;
+        }
+
+        .gate.open-left { transform: translateX(-150px) rotateY(60deg); opacity: 0; }
+        .gate.open-right { transform: translateX(150px) rotateY(-60deg); opacity: 0; }
+
+        .welcome-text {
+            font-size: 32px;
+            opacity: 0;
+            transition: opacity 1s ease 0.5s; /* Delay muncul */
+        }
+        .welcome-text.show { opacity: 1; }
+
+        /* === SCREEN 3: MOOD CHECK === */
+        .mood-container {
+            display: flex;
+            gap: 20px;
+            margin: 30px 0;
         }
 
         .mood-btn {
-            font-size: 3rem;
+            font-size: 50px;
             background: none;
             border: none;
-            box-shadow: none;
-            padding: 0;
             cursor: pointer;
-            transition: transform 0.2s;
+            transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            filter: grayscale(0.2);
         }
 
         .mood-btn:hover {
-            background: none;
-            transform: scale(1.2);
+            transform: scale(1.3);
+            filter: grayscale(0);
         }
 
-        #support-message {
+        .mood-btn.selected {
+            transform: scale(1.4);
+            filter: grayscale(0);
+            text-shadow: 0 0 20px var(--gold);
+        }
+
+        #support-text {
+            font-family: 'Lora', serif;
+            font-size: 20px;
             font-style: italic;
             color: var(--maroon);
-            margin-bottom: 2rem;
-            min-height: 1.2rem; /* Menjaga layout jika kosong */
+            min-height: 60px;
+            text-align: center;
+            max-width: 500px;
+            transition: opacity 0.3s;
         }
 
-        /* Tombol 'Lanjut Menulis' */
-        #start-writing-btn {
-            display: none;
-        }
-
-        /* 4. Sesi Bercerita */
-        #journal-page {
-            background-color: var(--pastel-yellow);
-        }
-
-        #journal-page h2 {
-            margin-bottom: 1.5rem;
-            color: var(--maroon);
-        }
-
-        #journal-textarea {
-            width: 100%;
-            height: 250px;
+        /* === SCREEN 4: JOURNALING === */
+        .letter-paper {
+            width: 90%;
+            max-width: 600px;
+            height: 50vh;
             background-color: var(--cream);
-            border: 3px solid var(--gold);
-            border-radius: 10px;
-            padding: 1rem;
-            font-size: 1rem;
+            border: 2px solid var(--gold);
+            border-radius: 5px;
+            padding: 30px;
+            font-family: 'Lora', serif;
+            font-size: 18px;
+            line-height: 1.8;
             color: var(--text-color);
-            box-sizing: border-box;
-            resize: none; /* User tidak bisa resize manual */
-            margin-bottom: 1.5rem;
-            font-family: var(--font-main);
-            box-shadow: inset 0 2px 4px rgba(0,0,0,0.05);
+            resize: none;
+            box-shadow: inset 0 0 15px rgba(255, 215, 0, 0.2), 0 5px 15px rgba(0,0,0,0.05);
+            background-image: repeating-linear-gradient(transparent, transparent 31px, rgba(200, 150, 0, 0.1) 31px, rgba(200, 150, 0, 0.1) 32px);
+            outline: none;
         }
 
-        /* 5. Penyegelan Surat */
-        #sealing-page {
-            background-color: var(--pastel-yellow);
-        }
-
-        .envelope-icon {
-            font-size: 7rem;
-            margin-bottom: 1.5rem;
+        /* === SCREEN 5: SEALING ANIMATION === */
+        .envelope-wrapper {
             position: relative;
+            font-size: 150px;
+            line-height: 1;
+            margin-bottom: 30px;
         }
 
-        /* Wax Seal Animation */
         .wax-seal {
-            width: 40px;
-            height: 40px;
-            background-color: var(--maroon);
-            border-radius: 50%;
-            border: 2px solid #6A1B4D;
             position: absolute;
             top: 50%;
             left: 50%;
-            transform: translate(-50%, -50%) scale(0);
-            box-shadow: 0 2px 4px rgba(0,0,0,0.3);
+            width: 60px;
+            height: 60px;
+            background: radial-gradient(circle, #A52A2A, var(--maroon));
+            border-radius: 50%;
+            box-shadow: inset 0 0 10px rgba(0,0,0,0.5), 0 5px 10px rgba(0,0,0,0.3);
+            transform: translate(-50%, -50%) scale(5);
             opacity: 0;
-        }
-
-        /* Class untuk trigger animasi via JS */
-        .sealing-animation .wax-seal {
-            animation: applySeal 1.5s ease-out forwards;
-        }
-
-        @keyframes applySeal {
-            0% { transform: translate(-50%, -50%) scale(5); opacity: 0; }
-            50% { transform: translate(-50%, -50%) scale(1); opacity: 1; }
-            100% { transform: translate(-50%, -50%) scale(1.1); opacity: 1; border-color: #B71C1C;} /* Efek stempel tekan */
-        }
-
-        .sealing-options {
             display: flex;
-            flex-direction: column;
-            gap: 1rem;
-            width: 80%;
-            margin-top: 2rem;
-            opacity: 0;
-            animation: fadeInOptions 0.5s ease-in 1.5s forwards; /* Muncul setelah animasi stempel */
-        }
-
-        @keyframes fadeInOptions {
-            to { opacity: 1; }
-        }
-
-        /* 6. Ruang Arsip Kerajaan */
-        #archive-page {
-            background-color: var(--pastel-yellow);
-            justify-content: flex-start; /* Start from top */
-            overflow-y: auto; /* Scrollable if long */
-        }
-
-        #archive-page h2 {
-            margin-top: 2rem;
-            margin-bottom: 1.5rem;
-            color: var(--maroon);
-        }
-
-        #archive-container {
-            width: 100%;
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 1.5rem;
-            margin-bottom: 2rem;
-        }
-
-        .archive-item {
-            background-color: var(--cream);
-            border: 2px solid var(--gold);
-            border-radius: 15px;
-            padding: 1rem;
-            cursor: pointer;
-            transition: transform 0.2s, box-shadow 0.2s;
-            text-align: center;
-        }
-
-        .archive-item:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 5px 10px rgba(0,0,0,0.1);
-        }
-
-        .archive-date {
-            font-weight: bold;
-            font-size: 0.9rem;
-            margin-bottom: 0.5rem;
-            color: var(--text-color);
-        }
-
-        .archive-mood {
-            font-size: 2rem;
-        }
-        
-        /* Modal for viewing details */
-        #archive-detail-modal {
-            display: none; /* Hidden by default */
-            position: fixed;
-            z-index: 100;
-            left: 0;
-            top: 0;
-            width: 100%;
-            height: 100%;
-            overflow: auto;
-            background-color: rgba(0,0,0,0.5); /* Semi-transparent background */
             justify-content: center;
             align-items: center;
+            font-size: 30px;
+            color: var(--gold);
+            transition: all 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275);
         }
 
-        #archive-detail-modal.show {
+        .wax-seal::after { content: '👑'; }
+
+        .wax-seal.stamped {
+            transform: translate(-50%, -50%) scale(1);
+            opacity: 1;
+        }
+
+        .sealing-buttons {
             display: flex;
+            gap: 20px;
+            opacity: 0;
+            transition: opacity 1s ease 1s; /* Delay until seal is stamped */
+        }
+        .sealing-buttons.show { opacity: 1; }
+
+        /* === SCREEN 6: ARCHIVE === */
+        #screen-archive {
+            justify-content: flex-start;
+            padding-top: 50px;
+            overflow-y: auto; /* Bisa scroll jika arsip banyak */
+        }
+
+        .bookshelf {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+            gap: 20px;
+            width: 100%;
+            max-width: 800px;
+            padding: 20px;
+            background-color: rgba(255, 253, 208, 0.5); /* Cream transparant */
+            border-bottom: 10px solid #8B4513; /* Kayu rak */
+            border-radius: 10px 10px 0 0;
+        }
+
+        .archive-card {
+            background: linear-gradient(135deg, var(--cream), #FFF9E6);
+            border: 2px solid var(--gold);
+            border-radius: 10px;
+            padding: 15px;
+            text-align: center;
+            cursor: pointer;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            transition: transform 0.2s, background 0.2s;
+        }
+
+        .archive-card:hover {
+            transform: translateY(-5px);
+            background: var(--gold);
+        }
+
+        .archive-date { font-size: 12px; font-weight: 600; color: var(--maroon); margin-bottom: 5px; }
+        .archive-mood { font-size: 30px; }
+
+        /* Modal Arsip */
+        .modal-overlay {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.5);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s;
+            z-index: 100;
+        }
+        .modal-overlay.active {
+            opacity: 1;
+            pointer-events: auto;
         }
 
         .modal-content {
-            background-color: var(--cream);
-            border: 3px solid var(--gold);
+            background: var(--cream);
+            border: 4px solid var(--gold);
             border-radius: 15px;
-            padding: 2rem;
-            width: 80%;
-            max-width: 400px;
-            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+            width: 90%;
+            max-width: 500px;
+            padding: 30px;
             position: relative;
+            transform: scale(0.8);
+            transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
         }
+        .modal-overlay.active .modal-content { transform: scale(1); }
 
-        .close-modal {
-            color: var(--maroon);
-            float: right;
-            font-size: 28px;
-            font-weight: bold;
+        .close-btn {
             position: absolute;
-            top: 10px;
-            right: 15px;
+            top: 10px; right: 15px;
+            font-size: 24px;
             cursor: pointer;
+            color: var(--maroon);
         }
-
-        #modal-date {
-            font-weight: bold;
-            margin-bottom: 0.5rem;
-        }
-        #modal-mood {
-            font-size: 2rem;
-            margin-bottom: 1rem;
-        }
-        #modal-content {
-            white-space: pre-wrap; /* Preserve line breaks */
-            text-align: left;
-            line-height: 1.5;
+        
+        .modal-body {
+            font-family: 'Lora', serif;
+            line-height: 1.6;
+            margin-top: 20px;
+            white-space: pre-wrap;
         }
 
     </style>
 </head>
 <body>
 
-    <div id="app-container">
-
-        <section id="landing-page" class="active">
-            <div class="castle-bg">🏰</div>
-            <div class="parchment-box">
-                <h1>The Yellow Royal Diary</h1>
-                <p>Boleh kami tahu nama Yang Mulia?</p>
-                <input type="text" id="name-input" placeholder="Masukkan nama panggilanmu...">
-                <button onclick="enterRoyalCastle()">Masuk ke Istana</button>
-            </div>
-        </section>
-
-        <section id="welcome-page">
-            <div class="gate-icon">🏯</div> <p id="welcome-text">Welcome home, Yang Mulia [Nama Pengguna]!</p>
-        </section>
-
-        <section id="mood-page">
-            <h2>Bagaimana Suasana Hati Yang Mulia Hari Ini?</h2>
-            <div class="mood-options">
-                <button class="mood-btn" onclick="selectMood('👑 Senang')">👑</button>
-                <button class="mood-btn" onclick="selectMood('🌤️ Biasa')">🌤️</button>
-                <button class="mood-btn" onclick="selectMood('🌧️ Sedih')">🌧️</button>
-                <button class="mood-btn" onclick="selectMood('🌪️ Marah')">🌪️</button>
-            </div>
-            <p id="support-message"></p>
-            <button id="start-writing-btn" onclick="goToJournaling()">Lanjut Menulis</button>
-        </section>
-
-        <section id="journal-page">
-            <h2>Ceritakan cerita kamu hari ini...</h2>
-            <textarea id="journal-textarea" placeholder="Tuliskan titah atau keluh kesah Yang Mulia di sini..."></textarea>
-            <button onclick="sealJournal()">Done</button>
-        </section>
-
-        <section id="sealing-page">
-            <div class="envelope-icon">
-                ✉️
-                <div class="wax-seal"></div>
-            </div>
-            <h2>Surat Telah Disegel!</h2>
-            <div class="sealing-options">
-                <button onclick="resetForNewEntry()">Ada titah/cerita lain, Yang Mulia?</button>
-                <button onclick="goToArchive()">Pergi ke Ruang Arsip</button>
-            </div>
-        </section>
-
-        <section id="archive-page">
-            <h2>Ruang Arsip Kerajaan</h2>
-            <div id="archive-container">
-                </div>
-            <button onclick="resetForNewEntry()">Tulis Jurnal Baru</button>
-        </section>
-
-        <div id="archive-detail-modal">
-            <div class="modal-content">
-                <span class="close-modal" onclick="closeModal()">&times;</span>
-                <p id="modal-date"></p>
-                <p id="modal-mood"></p>
-                <p id="modal-content"></p>
-            </div>
+    <div id="screen-landing" class="screen active">
+        <div class="castle-emoji">🏰</div>
+        <div class="parchment">
+            <h1>The Yellow Royal Diary</h1>
+            <p style="margin-bottom: 15px;">Boleh kami tahu nama Yang Mulia?</p>
+            <input type="text" id="input-name" placeholder="Ketik namamu..." autocomplete="off">
+            <button class="btn-royal" onclick="enterCastle()">Masuk ke Istana</button>
         </div>
+    </div>
 
+    <div id="screen-welcome" class="screen">
+        <div class="gate-container">
+            <div id="gate-left" class="gate">🚪</div>
+            <div id="gate-right" class="gate">🚪</div>
+        </div>
+        <h2 id="welcome-msg" class="welcome-text">Welcome home, Yang Mulia!</h2>
+    </div>
+
+    <div id="screen-mood" class="screen">
+        <h2>Bagaimana suasana hati Yang Mulia hari ini?</h2>
+        <div class="mood-container">
+            <button class="mood-btn" onclick="selectMood('👑 Senang', this, 'Luar biasa, Yang Mulia! Semoga kebahagiaan ini menular ke seluruh kerajaan.')">👑</button>
+            <button class="mood-btn" onclick="selectMood('🌤️ Biasa', this, 'Hari yang tenang adalah berkah tersendiri. Kami siap menemani hari Yang Mulia.')">🌤️</button>
+            <button class="mood-btn" onclick="selectMood('🌧️ Sedih', this, 'Jangan takut, Yang Mulia. Di sini aman. Biarkan kami menjaga perasaanmu.')">🌧️</button>
+            <button class="mood-btn" onclick="selectMood('🌪️ Marah', this, 'Keluarkan semua keluh kesah itu, Yang Mulia. Kertas ini menampung segalanya tanpa menghakimi.')">🌪️</button>
+        </div>
+        <p id="support-text"></p>
+        <button id="btn-lanjut" class="btn-royal" style="display: none; opacity: 0; transition: opacity 0.5s;" onclick="goToJournal()">Lanjut Menulis</button>
+    </div>
+
+    <div id="screen-journal" class="screen">
+        <h2>Ceritakan cerita kamu hari ini...</h2>
+        <textarea id="journal-text" class="letter-paper" placeholder="Tuliskan titah atau ceritamu di sini, Yang Mulia..."></textarea>
+        <button class="btn-royal" onclick="sealJournal()">Done</button>
+    </div>
+
+    <div id="screen-sealing" class="screen">
+        <div class="envelope-wrapper">
+            ✉️
+            <div id="wax-seal" class="wax-seal"></div>
+        </div>
+        <h2>Surat Telah Disegel!</h2>
+        <div id="sealing-options" class="sealing-buttons">
+            <button class="btn-royal" onclick="writeAgain()">Ada titah lain?</button>
+            <button class="btn-royal" onclick="goToArchive()">Pergi ke Ruang Arsip</button>
+        </div>
+    </div>
+
+    <div id="screen-archive" class="screen">
+        <h2>Ruang Arsip Kerajaan</h2>
+        <div class="bookshelf" id="bookshelf">
+            </div>
+        <button class="btn-royal" style="margin-top: 40px;" onclick="writeAgain()">Tulis Jurnal Baru</button>
+    </div>
+
+    <div id="archive-modal" class="modal-overlay">
+        <div class="modal-content">
+            <span class="close-btn" onclick="closeModal()">✖</span>
+            <h3 id="modal-title">Tanggal</h3>
+            <div id="modal-body" class="modal-body">Isi cerita...</div>
+        </div>
     </div>
 
     <script>
-        /* ==============================
-           JavaScript - Fungsi & Logika
-           ============================== */
-
+        // State Variables
         let userName = "";
         let currentMood = "";
-        let journalEntries = [];
+        let journalData = [];
 
-        // Helper function to switch active section
-        function showSection(sectionId) {
-            // Hide all sections
-            document.querySelectorAll('section').forEach(section => {
-                section.classList.remove('active');
-            });
-            // Show target section
-            document.getElementById(sectionId).classList.add('active');
+        // Inisialisasi: Ambil data dari LocalStorage jika ada
+        window.onload = () => {
+            const savedData = localStorage.getItem('royalDiaryEntries');
+            if(savedData) journalData = JSON.parse(savedData);
+            
+            const savedName = localStorage.getItem('royalDiaryName');
+            if(savedName) document.getElementById('input-name').value = savedName;
+        };
+
+        // Fungsi Transisi Antar Layar
+        function switchScreen(targetId) {
+            document.querySelectorAll('.screen').forEach(el => el.classList.remove('active'));
+            document.getElementById(targetId).classList.add('active');
         }
 
-        // Load data from LocalStorage on initial load
-        function loadJournalData() {
-            const storedEntries = localStorage.getItem('royalDiaryEntries');
-            if (storedEntries) {
-                journalEntries = JSON.parse(storedEntries);
+        // 1. Landing -> Welcome
+        function enterCastle() {
+            const input = document.getElementById('input-name').value.trim();
+            if (!input) {
+                alert("Mohon isi nama Yang Mulia terlebih dahulu.");
+                return;
             }
+            userName = input;
+            localStorage.setItem('royalDiaryName', userName);
+            
+            document.getElementById('welcome-msg').innerText = `Welcome home, Yang Mulia ${userName}!`;
+            switchScreen('screen-welcome');
+
+            // Animasi Welcome Screen
+            setTimeout(() => {
+                document.getElementById('gate-left').classList.add('open-left');
+                document.getElementById('gate-right').classList.add('open-right');
+                document.getElementById('welcome-msg').classList.add('show');
+            }, 500);
+
+            // Otomatis pindah ke Mood Check setelah jeda
+            setTimeout(() => {
+                switchScreen('screen-mood');
+            }, 3500);
         }
 
-        // 1. Halaman Kedatangan (Landing) -> Masuk
-        function enterRoyalCastle() {
-            const nameInput = document.getElementById('name-input').value.trim();
-            if (nameInput) {
-                userName = nameInput;
-                // Update welcome text
-                document.getElementById('welcome-text').innerText = `Welcome home, Yang Mulia ${userName}!`;
-                
-                showSection('welcome-page');
+        // 3. Mood Check Logic
+        function selectMood(moodName, btnElement, supportMessage) {
+            currentMood = moodName;
+            
+            // Hapus efek terpilih dari tombol lain
+            document.querySelectorAll('.mood-btn').forEach(btn => btn.classList.remove('selected'));
+            btnElement.classList.add('selected');
 
-                // Otomatis pindah ke Mood Check setelah jeda 3 detik
-                setTimeout(() => {
-                    showSection('mood-page');
-                }, 3500); // 3.5 detik untuk animasi gerbang + jeda
-            } else {
-                alert("Mohon beritahu kami nama panggilan Yang Mulia agar kami bisa menyambut dengan layak.");
-            }
+            // Tampilkan pesan supportif
+            const supportEl = document.getElementById('support-text');
+            supportEl.style.opacity = 0;
+            setTimeout(() => {
+                supportEl.innerText = `"${supportMessage}"`;
+                supportEl.style.opacity = 1;
+            }, 300);
+
+            // Tampilkan tombol lanjut
+            const btnLanjut = document.getElementById('btn-lanjut');
+            btnLanjut.style.display = "block";
+            setTimeout(() => btnLanjut.style.opacity = 1, 100);
         }
 
-        // 3. Cek Suasana Hati (Mood Check) -> Pilih Mood
-        function selectMood(mood) {
-            currentMood = mood;
-            const supportMessage = document.getElementById('support-message');
-            const startWritingBtn = document.getElementById('start-writing-btn');
-
-            let message = "";
-            switch (mood) {
-                case '👑 Senang':
-                    message = "Luar biasa! Energi positif Yang Mulia mencerahkan seisi istana. Pertahankan, ya!";
-                    break;
-                case '🌤️ Biasa':
-                    message = "Ketenangan adalah sebuah kekuatan. Hari yang damai untuk hati yang bijak.";
-                    break;
-                case '🌧️ Sedih':
-                    message = "Jangan takut, Yang Mulia. Di sini aman. Biarkan kami menjaga perasaanmu.";
-                    break;
-                case '🌪️ Marah':
-                    message = "Biarkan kemarahan itu mengalir keluar di sini. Kami mendengarkan tanpa menghakimi.";
-                    break;
-            }
-            supportMessage.innerText = message;
-            startWritingBtn.style.display = 'block'; // Show 'Lanjut Menulis' button
+        // 3 -> 4. Ke Area Menulis
+        function goToJournal() {
+            switchScreen('screen-journal');
         }
 
-        // 3. Mood Check -> Journaling
-        function goToJournaling() {
-            showSection('journal-page');
-        }
-
-        // 4. Sesi Bercerita -> Done (Trigger Animation & Save)
+        // 4 -> 5. Menyimpan Jurnal & Segel
         function sealJournal() {
-            const journalText = document.getElementById('journal-textarea').value.trim();
-            if (!journalText) {
-                alert("Jangan biarkan kertasnya kosong, Yang Mulia. Tuliskan sepatah dua patah kata hari ini.");
+            const text = document.getElementById('journal-text').value.trim();
+            if (!text) {
+                alert("Kertasnya masih kosong, Yang Mulia. Mohon tuliskan sesuatu.");
                 return;
             }
 
-            // Save data to object
-            const today = new Date();
-            const dateString = `${today.getDate()} ${today.toLocaleString('id', { month: 'short' })} ${today.getFullYear()}`;
+            // Simpan Data
+            const dateStr = new Date().toLocaleDateString('id-ID', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
             
             const newEntry = {
-                date: dateString,
-                username: userName,
+                id: Date.now(),
+                date: dateStr,
                 mood: currentMood,
-                content: journalText
+                content: text
             };
 
-            // Add to array and save to LocalStorage
-            journalEntries.push(newEntry);
-            localStorage.setItem('royalDiaryEntries', JSON.stringify(journalEntries));
+            journalData.push(newEntry);
+            localStorage.setItem('royalDiaryEntries', JSON.stringify(journalData));
 
-            // Show sealing page
-            showSection('sealing-page');
+            // Bersihkan textarea untuk sesi berikutnya
+            document.getElementById('journal-text').value = '';
+
+            // Pindah ke layar segel & jalankan animasi
+            switchScreen('screen-sealing');
             
-            // Add class to trigger CSS animation for the seal
-            const sealingSection = document.getElementById('sealing-page');
-            sealingSection.classList.add('sealing-animation');
+            // Reset state animasi
+            const seal = document.getElementById('wax-seal');
+            const buttons = document.getElementById('sealing-options');
+            seal.classList.remove('stamped');
+            buttons.classList.remove('show');
 
-            // Resettextarea
-            document.getElementById('journal-textarea').value = "";
+            // Trigger animasi cap lilin
+            setTimeout(() => {
+                seal.classList.add('stamped');
+            }, 500);
+
+            // Munculkan tombol opsi setelah disegel
+            setTimeout(() => {
+                buttons.classList.add('show');
+            }, 1200);
         }
 
-        // 5. Penyegelan Surat -> Reset for New Entry
-        function resetForNewEntry() {
+        // 5. Opsi: Tulis lagi
+        function writeAgain() {
+            // Reset mood selection
             currentMood = "";
-            document.getElementById('support-message').innerText = "";
-            document.getElementById('start-writing-btn').style.display = 'none';
-            showSection('mood-page');
+            document.querySelectorAll('.mood-btn').forEach(btn => btn.classList.remove('selected'));
+            document.getElementById('support-text').innerText = "";
+            const btnLanjut = document.getElementById('btn-lanjut');
+            btnLanjut.style.opacity = 0;
+            setTimeout(() => btnLanjut.style.display = "none", 500);
+
+            switchScreen('screen-mood');
         }
 
-        // 5. Penyegelan Surat -> Go to Archive
+        // 5 -> 6. Opsi: Ke Arsip
         function goToArchive() {
-            populateArchiveList();
-            showSection('archive-page');
+            renderArchive();
+            switchScreen('screen-archive');
         }
 
-        // 6. Ruang Arsip Kerajaan -> Populate List
-        function populateArchiveList() {
-            const container = document.getElementById('archive-container');
-            container.innerHTML = ""; // Clear existing
+        // 6. Render Data Arsip ke Rak Buku
+        function renderArchive() {
+            const bookshelf = document.getElementById('bookshelf');
+            bookshelf.innerHTML = ''; // Kosongkan dulu
 
-            // Get entries from object (already loaded)
-            const entriesToDisplay = JSON.parse(localStorage.getItem('royalDiaryEntries')) || [];
-
-            if (entriesToDisplay.length === 0) {
-                container.innerHTML = "<p style='grid-column: span 2;'>Belum ada titah tertulis yang tersimpan di arsip.</p>";
+            if(journalData.length === 0) {
+                bookshelf.innerHTML = "<p style='grid-column: 1/-1; text-align: center; color: var(--maroon);'>Belum ada arsip kerajaan yang tercatat.</p>";
                 return;
             }
 
-            // Display backwards (most recent first)
-            for (let i = entriesToDisplay.length - 1; i >= 0; i--) {
-                const entry = entriesToDisplay[i];
+            // Tampilkan dari yang terbaru (reverse)
+            const reversedData = [...journalData].reverse();
+
+            reversedData.forEach(entry => {
+                const card = document.createElement('div');
+                card.className = 'archive-card';
                 
-                const archiveItem = document.createElement('div');
-                archiveItem.className = 'archive-item';
-                archiveItem.onclick = () => openArchiveDetail(entry); // Pass entry to detail function
+                // Ambil emoji saja dari string mood (misal: "👑 Senang" -> "👑")
+                const emojiOnly = entry.mood.split(' ')[0];
 
-                const dateDiv = document.createElement('div');
-                dateDiv.className = 'archive-date';
-                dateDiv.innerText = entry.date;
+                card.innerHTML = `
+                    <div class="archive-date">${entry.date.split(',')[1] || entry.date}</div>
+                    <div class="archive-mood">${emojiOnly}</div>
+                `;
 
-                const moodDiv = document.createElement('div');
-                moodDiv.className = 'archive-mood';
-                moodDiv.innerText = entry.mood;
-
-                archiveItem.appendChild(dateDiv);
-                archiveItem.appendChild(moodDiv);
-                container.appendChild(archiveItem);
-            }
+                // Event saat kartu diklik buka modal
+                card.onclick = () => openModal(entry);
+                bookshelf.appendChild(card);
+            });
         }
 
-        // Modal functionality
-        function openArchiveDetail(entry) {
-            document.getElementById('modal-date').innerText = entry.date;
-            document.getElementById('modal-mood').innerText = entry.mood;
-            document.getElementById('modal-content').innerText = entry.content;
-            document.getElementById('archive-detail-modal').classList.add('show');
+        // Modal Logic
+        function openModal(entry) {
+            document.getElementById('modal-title').innerText = `${entry.date} - ${entry.mood}`;
+            document.getElementById('modal-body').innerText = entry.content;
+            document.getElementById('archive-modal').classList.add('active');
         }
 
         function closeModal() {
-            document.getElementById('archive-detail-modal').classList.remove('show');
+            document.getElementById('archive-modal').classList.remove('active');
         }
-
-        // Close modal if user clicks outside the content area
-        window.onclick = function(event) {
-            const modal = document.getElementById('archive-detail-modal');
-            if (event.target == modal) {
-                closeModal();
-            }
-        }
-
-        // Initial Load: Check if name exists in LocalStorage from previous sessions (optional enhancement)
-        window.onload = function() {
-            loadJournalData();
-            
-            // Optional: Auto-fill name if it was stored before
-            const savedName = localStorage.getItem('royalDiaryUserName');
-            if (savedName) {
-                document.getElementById('name-input').value = savedName;
-            }
-        };
-
-        // When saving the name, also save to LocalStorage for persistence (optional enhancement)
-        const enterRoyalCastleOriginal = enterRoyalCastle;
-        enterRoyalCastle = function() {
-            enterRoyalCastleOriginal();
-            if(userName) {
-                 localStorage.setItem('royalDiaryUserName', userName);
-            }
-        };
 
     </script>
 </body>
