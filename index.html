@@ -3,371 +3,643 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>The Yellow Royal Diary - 3D Palace Edition</title>
+    <title>The Royal 3D Diary</title>
     <style>
         /* === IMPORT FONTS === */
-        /* Cinzel untuk aura kerajaan, Dancing Script untuk tulisan tangan */
-        @import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@500;700;900&family=Dancing+Script:wght@500;700&family=Lora:ital@1&display=swap');
+        /* Cinzel untuk nuansa Kerajaan, Dancing Script untuk Lettering curahan hati */
+        @import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@500;700&family=Dancing+Script:wght@600;700&display=swap');
 
+        /* === COLOR PALETTE & VARIABLES === */
         :root {
-            --royal-red: #5b0f18;
-            --royal-gold: #d4af37;
-            --gold-light: #f3e5ab;
-            --parchment: #fdf5e6;
-            --text-ink: #2b1d0e;
+            --royal-gold: #FFD700;
+            --royal-gold-dark: #B8860B;
+            --royal-red: #800000;
+            --royal-red-dark: #4A0000;
+            --parchment: #FDF5E6;
+            --parchment-dark: #E6C280;
+            --text-dark: #2B1810;
         }
 
-        * { box-sizing: border-box; margin: 0; padding: 0; }
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            user-select: none; /* Mencegah seleksi teks yang tidak disengaja */
+        }
 
+        /* === 3D BRICK WALL BACKGROUND === */
         body {
-            /* Dinding Istana dengan efek wallpaper damask / mewah */
-            background-color: var(--royal-red);
-            background-image: 
-                radial-gradient(circle at center, rgba(212, 175, 55, 0.1) 0%, rgba(0, 0, 0, 0.8) 100%),
-                repeating-linear-gradient(45deg, transparent, transparent 20px, rgba(0,0,0,0.1) 20px, rgba(0,0,0,0.1) 40px);
-            color: var(--gold-light);
             font-family: 'Cinzel', serif;
+            color: var(--royal-gold);
             overflow: hidden;
             height: 100vh;
             display: flex;
             justify-content: center;
             align-items: center;
-            perspective: 1000px; /* Penting untuk efek 3D */
+            /* Dinding Bata Kerajaan */
+            background-color: #5e2c23;
+            background-image: 
+                linear-gradient(335deg, rgba(0,0,0,0.6) 2px, transparent 2px),
+                linear-gradient(155deg, rgba(0,0,0,0.6) 2px, transparent 2px),
+                linear-gradient(335deg, rgba(0,0,0,0.3) 1px, transparent 1px),
+                linear-gradient(155deg, rgba(0,0,0,0.3) 1px, transparent 1px);
+            background-size: 80px 40px, 80px 40px, 20px 20px, 20px 20px;
+            background-position: 0 0, 40px 20px, 0 0, 10px 10px;
+            box-shadow: inset 0 0 150px rgba(0,0,0,0.9); /* Efek vignette gelap ruangan istana */
         }
 
-        h1, h2, h3 { text-shadow: 2px 2px 4px rgba(0,0,0,0.7); text-align: center; }
-
-        /* === BINGKAI KELUARGA KERAJAAN (BACKGROUND) === */
-        .royal-portrait {
-            position: absolute;
-            top: 20px;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 150px;
-            height: 100px;
-            background: linear-gradient(135deg, #2a0800, #5b0f18);
-            border: 5px solid var(--royal-gold);
-            border-radius: 10px;
-            box-shadow: 0 10px 20px rgba(0,0,0,0.8), inset 0 0 20px rgba(0,0,0,0.9);
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            font-size: 40px;
-            z-index: 0;
-            opacity: 0.7;
-        }
-
-        /* === PELAYAN ISTANA (BUTLER NARRATOR) === */
-        #butler-box {
-            position: absolute;
-            bottom: 30px;
-            left: 50%;
-            transform: translateX(-50%);
-            background: rgba(0, 0, 0, 0.8);
-            border: 2px solid var(--royal-gold);
-            padding: 15px 30px;
-            border-radius: 50px;
-            font-family: 'Lora', serif;
-            font-style: italic;
-            color: var(--gold-light);
-            z-index: 100;
+        h1, h2, h3 {
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.8);
             text-align: center;
-            min-width: 300px;
-            box-shadow: 0 0 20px rgba(212, 175, 55, 0.3);
-            transition: all 0.5s ease;
+            margin-bottom: 20px;
+            letter-spacing: 2px;
         }
-        .butler-name { font-family: 'Cinzel', serif; font-size: 12px; color: var(--royal-gold); font-style: normal; display: block; margin-bottom: 5px; }
 
-        /* === SPA SCREENS === */
+        /* === SPA SCREEN TRANSITIONS === */
         .screen {
             position: absolute;
-            top: 0; left: 0; width: 100%; height: 100%;
-            display: flex; flex-direction: column; justify-content: center; align-items: center;
-            opacity: 0; pointer-events: none;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            opacity: 0;
+            pointer-events: none;
             transition: opacity 0.8s ease, transform 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            transform: translateZ(-200px) rotateY(20deg); /* 3D effect saat inaktif */
-            z-index: 10;
-        }
-        .screen.active {
-            opacity: 1; pointer-events: auto;
-            transform: translateZ(0) rotateY(0deg);
+            transform: translateZ(-500px) scale(0.8);
+            perspective: 1000px;
         }
 
-        /* === BUTTONS 3D === */
-        .btn-3d {
-            background: linear-gradient(to bottom, #f9d976 0%, #e9b646 100%);
-            color: var(--royal-red);
-            border: 2px solid #8a6327;
+        .screen.active {
+            opacity: 1;
+            pointer-events: auto;
+            transform: translateZ(0) scale(1);
+            z-index: 10;
+        }
+
+        /* === 3D BUTTONS === */
+        .btn-royal {
+            background: linear-gradient(to bottom, var(--royal-gold), var(--royal-gold-dark));
+            color: var(--royal-red-dark);
+            border: 2px solid #fff;
             padding: 15px 30px;
+            font-size: 18px;
             font-family: 'Cinzel', serif;
-            font-weight: 900;
-            font-size: 16px;
+            font-weight: 700;
             border-radius: 5px;
             cursor: pointer;
-            box-shadow: 0 6px 0 #8a6327, 0 10px 20px rgba(0,0,0,0.5);
-            transition: all 0.1s;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.5), inset 0 -3px 5px rgba(0,0,0,0.3);
+            transition: all 0.2s;
+            margin: 10px;
             text-transform: uppercase;
-            margin-top: 20px;
         }
-        .btn-3d:active {
-            transform: translateY(6px);
-            box-shadow: 0 0 0 #8a6327, 0 2px 5px rgba(0,0,0,0.5);
+
+        .btn-royal:hover {
+            transform: translateY(-5px) scale(1.05);
+            box-shadow: 0 15px 25px rgba(0,0,0,0.7), inset 0 -3px 5px rgba(0,0,0,0.3);
+        }
+
+        .btn-royal:active {
+            transform: translateY(2px);
+            box-shadow: 0 5px 10px rgba(0,0,0,0.5), inset 0 3px 5px rgba(0,0,0,0.3);
+        }
+
+        /* === ROYAL FAMILY / ATTENDANTS (Pelayanan Istana) === */
+        .attendant-card {
+            background: rgba(0, 0, 0, 0.6);
+            border: 2px solid var(--royal-gold);
+            padding: 20px;
+            border-radius: 15px;
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            margin-bottom: 30px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            backdrop-filter: blur(5px);
+            max-width: 600px;
+            transform: translateZ(50px);
+        }
+
+        .attendant-avatar {
+            font-size: 60px;
+            filter: drop-shadow(0 0 10px var(--royal-gold));
+            animation: float 3s ease-in-out infinite;
+        }
+
+        .attendant-dialogue {
+            font-size: 20px;
+            line-height: 1.5;
+            color: #fff;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
         }
 
         /* === SCREEN 1: LANDING === */
-        #screen-landing h1 { font-size: 48px; color: var(--royal-gold); margin-bottom: 10px; }
-        .input-3d {
-            background: rgba(255, 255, 255, 0.1);
-            border: 2px solid var(--royal-gold);
-            color: var(--gold-light);
-            padding: 15px; font-size: 20px; font-family: 'Cinzel', serif;
-            text-align: center; border-radius: 5px; width: 300px; outline: none;
-            box-shadow: inset 0 0 10px rgba(0,0,0,0.8);
+        .parchment-input {
+            width: 300px;
+            padding: 15px;
+            font-size: 20px;
+            font-family: 'Cinzel', serif;
+            text-align: center;
+            background: var(--parchment);
+            border: 3px solid var(--royal-gold-dark);
+            color: var(--royal-red-dark);
+            font-weight: bold;
+            border-radius: 5px;
+            box-shadow: inset 0 0 10px rgba(0,0,0,0.5);
+            outline: none;
+            margin-bottom: 20px;
         }
-        .input-3d::placeholder { color: rgba(243, 229, 171, 0.5); }
 
-        /* === SCREEN 2: MOOD CHECK === */
-        .mood-container { display: flex; gap: 30px; margin-top: 40px; }
+        /* === SCREEN 3: MOOD === */
+        .mood-grid {
+            display: flex;
+            gap: 20px;
+            margin: 20px 0;
+            perspective: 1000px;
+        }
+
         .mood-btn {
-            font-size: 60px; background: none; border: none; cursor: pointer;
-            transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            filter: drop-shadow(0 10px 10px rgba(0,0,0,0.5));
+            font-size: 60px;
+            background: rgba(255,255,255,0.1);
+            border: 2px solid var(--royal-gold);
+            border-radius: 50%;
+            width: 100px; height: 100px;
+            cursor: pointer;
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            transform-style: preserve-3d;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.5);
         }
-        .mood-btn:hover { transform: scale(1.3) translateZ(50px); }
 
-        /* === SCREEN 3: 3D JOURNALING === */
-        .scroll-wrapper {
-            position: relative;
-            width: 90%; max-width: 700px; height: 60vh;
-            perspective: 1200px;
+        .mood-btn:hover {
+            transform: translateZ(30px) scale(1.1) rotateY(15deg);
+            background: rgba(255,215,0,0.3);
         }
-        /* Kertas 3D */
-        .paper-3d {
-            width: 100%; height: 100%;
-            background: linear-gradient(to right, #e6c27a 0%, var(--parchment) 5%, var(--parchment) 95%, #e6c27a 100%);
-            border-left: 10px solid #b8860b; border-right: 10px solid #b8860b; /* Gulungan kayu */
-            border-radius: 3px;
-            padding: 40px 50px;
+
+        .mood-btn.selected {
+            transform: translateZ(50px) scale(1.2);
+            background: var(--royal-gold);
+            box-shadow: 0 0 30px var(--royal-gold);
+        }
+
+        /* === SCREEN 4: 3D JOURNAL (Kertas Animasi & Lettering) === */
+        .parchment-3d-container {
+            position: relative;
+            width: 90%;
+            max-width: 700px;
+            height: 60vh;
+            perspective: 1200px;
+            margin-bottom: 20px;
+        }
+
+        .parchment-3d {
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, var(--parchment), #E8D3A2);
+            border: 2px solid #C49A45;
             box-shadow: 
-                0 30px 50px rgba(0,0,0,0.7),
-                inset 0 0 30px rgba(139, 69, 19, 0.3);
-            /* Animasi membuka gulungan */
-            transform-origin: center;
+                -10px 10px 30px rgba(0,0,0,0.8), 
+                inset 0 0 50px rgba(139,69,19,0.3);
+            border-radius: 2px 20px 2px 20px;
+            transform: rotateX(10deg);
+            transform-origin: top;
+            padding: 40px;
+            position: relative;
             animation: unroll 1.5s ease-out forwards;
         }
 
+        /* Roll edges */
+        .parchment-3d::before, .parchment-3d::after {
+            content: '';
+            position: absolute;
+            left: 0; width: 100%; height: 30px;
+            background: linear-gradient(to bottom, #C49A45, var(--parchment));
+            border-radius: 50%;
+        }
+        .parchment-3d::before { top: -15px; box-shadow: 0 5px 10px rgba(0,0,0,0.5); }
+        .parchment-3d::after { bottom: -15px; background: linear-gradient(to top, #C49A45, var(--parchment)); box-shadow: 0 -5px 10px rgba(0,0,0,0.5); }
+
         @keyframes unroll {
-            0% { transform: rotateX(60deg) scaleY(0); opacity: 0; }
-            50% { transform: rotateX(-10deg) scaleY(1.1); opacity: 1; }
-            100% { transform: rotateX(0deg) scaleY(1); opacity: 1; }
+            0% { transform: rotateX(80deg) scaleY(0.1); opacity: 0; }
+            100% { transform: rotateX(5deg) scaleY(1); opacity: 1; }
         }
 
-        /* Tulisan Tangan */
-        .lettering-input {
-            width: 100%; height: 100%;
-            background: transparent; border: none; outline: none; resize: none;
-            font-family: 'Dancing Script', cursive; /* Tulisan Tangan Mewah */
+        textarea.lettering-font {
+            width: 100%;
+            height: 100%;
+            background: transparent;
+            border: none;
+            outline: none;
+            resize: none;
+            font-family: 'Dancing Script', cursive; /* FONT LETTERING */
             font-size: 32px;
             line-height: 1.6;
-            color: var(--text-ink);
-            text-shadow: 0px 0px 1px rgba(0,0,0,0.2); /* Efek tinta basah */
+            color: var(--royal-red-dark);
+            text-shadow: 1px 1px 0px rgba(255,255,255,0.5);
+        }
+        textarea.lettering-font::placeholder {
+            color: rgba(74, 0, 0, 0.4);
         }
 
-        /* === SCREEN 4: GAME (BANISH GLOOM) === */
+        /* === SCREEN 5: 3D ENVELOPE (Arsip & Segel) === */
+        .envelope-3d {
+            position: relative;
+            width: 300px;
+            height: 200px;
+            background: var(--parchment-dark);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.7);
+            margin: 40px 0;
+            transform-style: preserve-3d;
+            transform: rotateY(-10deg) rotateX(10deg);
+            transition: transform 1s;
+        }
+
+        .envelope-flap {
+            position: absolute;
+            top: 0; left: 0;
+            border-left: 150px solid transparent;
+            border-right: 150px solid transparent;
+            border-top: 100px solid #D4AF37;
+            transform-origin: top;
+            transform: rotateX(0deg);
+            transition: transform 1s 0.5s;
+            z-index: 2;
+        }
+
+        .wax-seal-3d {
+            position: absolute;
+            top: 80px; left: 120px;
+            width: 60px; height: 60px;
+            background: radial-gradient(circle, #ff3333, var(--royal-red-dark));
+            border-radius: 50%;
+            box-shadow: 0 5px 10px rgba(0,0,0,0.5), inset 0 2px 5px rgba(255,255,255,0.3);
+            display: flex; justify-content: center; align-items: center;
+            font-size: 30px;
+            color: var(--royal-gold);
+            z-index: 3;
+            transform: scale(0);
+            transition: transform 0.5s 1.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        .sealing-active .envelope-flap { transform: rotateX(180deg); }
+        .sealing-active .wax-seal-3d { transform: scale(1); }
+
+        /* === SCREEN 6: ARCHIVE WALL === */
+        .archive-wall {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 30px;
+            width: 90%;
+            max-width: 1000px;
+            height: 60vh;
+            overflow-y: auto;
+            padding: 20px;
+            perspective: 1000px;
+        }
+
+        /* Scrollbar styling */
+        .archive-wall::-webkit-scrollbar { width: 10px; }
+        .archive-wall::-webkit-scrollbar-track { background: rgba(0,0,0,0.5); border-radius: 5px; }
+        .archive-wall::-webkit-scrollbar-thumb { background: var(--royal-gold); border-radius: 5px; }
+
+        .archive-envelope {
+            position: relative;
+            width: 200px; height: 130px;
+            background: #D4AF37;
+            box-shadow: 5px 10px 15px rgba(0,0,0,0.6);
+            cursor: pointer;
+            transition: transform 0.3s;
+            display: flex; flex-direction: column; justify-content: flex-end; align-items: center;
+            padding-bottom: 10px;
+        }
+
+        .archive-envelope::before {
+            content: ''; position: absolute; top: 0; left: 0;
+            border-left: 100px solid transparent; border-right: 100px solid transparent; border-top: 65px solid #C5A030;
+        }
+        
+        /* Lilin Arsip */
+        .archive-envelope::after {
+            content: '👑'; position: absolute; top: 50px; left: 85px;
+            width: 30px; height: 30px; background: var(--royal-red); border-radius: 50%;
+            font-size: 14px; display: flex; justify-content: center; align-items: center;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.5); color: gold;
+        }
+
+        .archive-envelope:hover { transform: translateY(-10px) scale(1.05); }
+
+        .env-date { font-size: 14px; font-weight: bold; color: var(--royal-red-dark); z-index: 1; text-shadow: none;}
+        .env-mood { font-size: 24px; z-index: 1; }
+
+        /* === MINI GAME: ROYAL JEWEL DROP === */
+        #screen-game {
+            background: rgba(0,0,0,0.8);
+            backdrop-filter: blur(5px);
+        }
+
         #game-area {
-            width: 80%; max-width: 600px; height: 50vh;
-            background: rgba(0,0,0,0.5);
-            border: 4px solid var(--royal-gold);
-            border-radius: 10px; position: relative; overflow: hidden;
-            cursor: crosshair;
-            box-shadow: inset 0 0 50px rgba(0,0,0,0.9);
+            position: relative; width: 100%; height: 60vh; border: 4px solid var(--royal-gold);
+            border-radius: 10px; overflow: hidden; background: #2B1810; margin-bottom: 20px;
+            box-shadow: inset 0 0 50px #000;
         }
-        .gloom-monster {
-            position: absolute; font-size: 40px; cursor: pointer;
-            transition: transform 0.2s;
-            animation: float 2s infinite alternate;
+
+        .jewel {
+            position: absolute; font-size: 40px; cursor: pointer; user-select: none;
+            transition: transform 0.1s; filter: drop-shadow(0 0 10px rgba(255,215,0,0.8));
         }
-        @keyframes float { from { transform: translateY(0px); } to { transform: translateY(-20px); } }
-        #score-board { font-size: 24px; color: var(--gold-light); margin-bottom: 20px; }
+        .jewel:active { transform: scale(0.5); }
+
+        .score-board { font-size: 24px; color: var(--royal-gold); background: rgba(0,0,0,0.5); padding: 10px 20px; border-radius: 10px; border: 1px solid var(--royal-gold);}
+
+        /* === MODAL ARSIP === */
+        .modal {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.8); display: flex; justify-content: center; align-items: center;
+            opacity: 0; pointer-events: none; transition: opacity 0.4s; z-index: 100; perspective: 1000px;
+        }
+        .modal.active { opacity: 1; pointer-events: auto; }
+        
+        .modal-paper {
+            width: 90%; max-width: 500px; background: var(--parchment);
+            padding: 40px; border: 2px solid var(--royal-gold); border-radius: 10px;
+            transform: rotateX(90deg); transition: transform 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            box-shadow: 0 20px 50px rgba(0,0,0,0.8);
+        }
+        .modal.active .modal-paper { transform: rotateX(0deg); }
+
+        .modal-close {
+            position: absolute; top: 10px; right: 20px; font-size: 30px; cursor: pointer; color: var(--royal-red);
+        }
+        .modal-content-text {
+            font-family: 'Dancing Script', cursive; font-size: 28px; color: var(--text-dark);
+            margin-top: 20px; line-height: 1.5; white-space: pre-wrap;
+        }
 
     </style>
 </head>
 <body>
 
-    <div class="royal-portrait">
-        👨‍👑👩‍👑
-    </div>
-
-    <div id="butler-box">
-        <span class="butler-name">Lord Chamberlain</span>
-        <span id="butler-text">Selamat datang di Istana, Yang Mulia.</span>
-    </div>
-
     <div id="screen-landing" class="screen active">
-        <h1>The Royal Diary</h1>
-        <h3 style="margin-bottom: 30px; font-weight: normal; font-family: 'Lora';">Bilik Rahasia Tinta Emas</h3>
-        <input type="text" id="input-name" class="input-3d" placeholder="Gelar & Nama Anda..." autocomplete="off">
-        <button class="btn-3d" onclick="enterPalace()">Buka Gerbang Istana</button>
+        <div class="attendant-card">
+            <div class="attendant-avatar">💂</div>
+            <div class="attendant-dialogue">
+                "Halt! Gerbang Istana Royal Diary hanya terbuka untuk anggota kerajaan. Sebutkan gelar dan nama Yang Mulia!"
+            </div>
+        </div>
+        <h1>The Royal 3D Diary</h1>
+        <input type="text" id="input-name" class="parchment-input" placeholder="Nama Yang Mulia..." autocomplete="off">
+        <button class="btn-royal" onclick="enterCastle()">Buka Gerbang Istana</button>
     </div>
 
     <div id="screen-mood" class="screen">
-        <h2>Bagaimana cuaca hati Anda hari ini, Yang Mulia?</h2>
-        <div class="mood-container">
-            <button class="mood-btn" onclick="selectMood('👑 Senang', 'positif')">👑</button>
-            <button class="mood-btn" onclick="selectMood('🌤️ Tenang', 'netral')">🌤️</button>
-            <button class="mood-btn" onclick="selectMood('🌧️ Sedih', 'negatif')">🌧️</button>
-            <button class="mood-btn" onclick="selectMood('🌪️ Marah', 'negatif')">🌪️</button>
+        <div class="attendant-card">
+            <div class="attendant-avatar">👸</div> <div class="attendant-dialogue" id="dialogue-mood">
+                "Selamat datang kembali. Kami telah menyiapkan ruangan Anda. Bagaimana suasana hati Yang Mulia hari ini?"
+            </div>
         </div>
-        <div id="action-buttons" style="display: none; margin-top: 40px; gap: 20px;">
-            <button class="btn-3d" id="btn-write" onclick="openScroll()">Tulis Titah</button>
-            <button class="btn-3d" id="btn-game" style="display: none; background: linear-gradient(to bottom, #ff7e5f, #feb47b);" onclick="startGame()">Main Panahan Stres</button>
+        
+        <div class="mood-grid">
+            <div class="mood-btn" onclick="selectMood('👑 Senang', this, 'Luar biasa! Seluruh istana ikut bersuka cita melihat senyum Yang Mulia. Mari abadikan momen ini.')">👑</div>
+            <div class="mood-btn" onclick="selectMood('🌤️ Biasa', this, 'Hari yang damai di kerajaan. Silakan bersantai, kami siap mencatat titah Anda.')">🌤️</div>
+            <div class="mood-btn" onclick="selectMood('🌧️ Sedih', this, 'Jangan bersedih, Yang Mulia. Dinding istana ini tebal, ia akan menjaga rahasia dan tangis Anda dengan aman.')">🌧️</div>
+            <div class="mood-btn" onclick="selectMood('🌪️ Marah', this, 'Keluarkan amarah itu, Yang Mulia! Kertas ini siap menampung kobaran api Anda tanpa menghakimi.')">🌪️</div>
+        </div>
+
+        <div style="display: flex; gap: 20px; margin-top: 20px;">
+            <button id="btn-lanjut" class="btn-royal" style="display: none;" onclick="goToJournal()">Tulis Curahan Hati</button>
+            <button class="btn-royal" style="background: linear-gradient(to bottom, #4CAF50, #2E7D32);" onclick="openGame()">Taman Hiburan Istana</button>
         </div>
     </div>
 
     <div id="screen-journal" class="screen">
-        <div class="scroll-wrapper">
-            <div class="paper-3d">
-                <textarea id="journal-text" class="lettering-input" placeholder="Tinta emas telah disiapkan. Goreskan isi hati Anda di sini..."></textarea>
+        <h2>Meja Tulis Kerajaan</h2>
+        <div class="parchment-3d-container">
+            <div class="parchment-3d">
+                <textarea id="journal-text" class="lettering-font" placeholder="Goreskan tinta Anda di sini, Yang Mulia..."></textarea>
             </div>
         </div>
-        <button class="btn-3d" onclick="sealJournal()">Segel Gulungan Ini</button>
+        <button class="btn-royal" onclick="sealJournal()">Segel Surat Ini</button>
+    </div>
+
+    <div id="screen-sealing" class="screen">
+        <h2>Menyegel Titah Yang Mulia...</h2>
+        <div class="envelope-3d" id="envelope-anim">
+            <div class="envelope-flap"></div>
+            <div class="wax-seal-3d">👑</div>
+        </div>
+        <div id="sealing-options" style="opacity: 0; transition: opacity 1s; display: flex; gap: 20px;">
+            <button class="btn-royal" onclick="goHome()">Kembali ke Aula</button>
+            <button class="btn-royal" onclick="goToArchive()">Ruang Arsip</button>
+        </div>
+    </div>
+
+    <div id="screen-archive" class="screen">
+        <h2>Ruang Arsip Rahasia</h2>
+        <p style="margin-bottom: 20px; font-size: 18px; text-shadow: 1px 1px 2px #000;">Seluruh surat yang tersegel aman di balik dinding bata istana ini.</p>
+        <div class="archive-wall" id="archive-wall">
+            </div>
+        <button class="btn-royal" onclick="goHome()">Kembali ke Aula</button>
     </div>
 
     <div id="screen-game" class="screen">
-        <h2>Latihan Pedang: Usir Kesedihan!</h2>
-        <div id="score-board">Skor Monster: <span id="game-score">0</span> / 10</div>
+        <div class="attendant-card" style="margin-bottom: 10px;">
+            <div class="attendant-avatar">🤹</div>
+            <div class="attendant-dialogue">
+                "Pikiran sedang suntuk? Mari tangkap permata kerajaan yang jatuh untuk meredakan stres Yang Mulia!"
+            </div>
+        </div>
+        <div style="display: flex; justify-content: space-between; width: 100%; max-width: 600px; margin-bottom: 10px;">
+            <div class="score-board">Skor: <span id="game-score">0</span></div>
+            <div class="score-board">Waktu: <span id="game-time">15</span>s</div>
+        </div>
         <div id="game-area"></div>
-        <button class="btn-3d" onclick="endGame()">Sudah Merasa Lebih Baik, Kembali Menulis</button>
+        <div style="display: flex; gap: 20px;">
+            <button class="btn-royal" id="btn-start-game" onclick="startGame()">Mulai Permainan</button>
+            <button class="btn-royal" onclick="goHome()">Sudahi Permainan</button>
+        </div>
+    </div>
+
+    <div id="archive-modal" class="modal">
+        <div class="modal-paper">
+            <span class="modal-close" onclick="closeModal()">✖</span>
+            <h2 id="modal-title" style="color: var(--royal-red-dark); text-shadow: none;">Tanggal</h2>
+            <hr style="border-color: var(--royal-gold); margin: 10px 0;">
+            <div id="modal-content" class="modal-content-text">Isi surat...</div>
+        </div>
     </div>
 
     <script>
+        // === STATE & LOGIC ===
         let userName = "";
         let currentMood = "";
-        let butlerText = document.getElementById('butler-text');
-        
-        // --- SISTEM PELAYAN (BUTLER) ---
-        function butlerSpeak(text) {
-            butlerText.style.opacity = 0;
-            setTimeout(() => {
-                butlerText.innerText = `"${text}"`;
-                butlerText.style.opacity = 1;
-            }, 300);
-        }
+        let journalData = [];
 
-        function switchScreen(id) {
+        // Inisialisasi Data
+        window.onload = () => {
+            const savedData = localStorage.getItem('royal3DDiaryEntries');
+            if(savedData) journalData = JSON.parse(savedData);
+            const savedName = localStorage.getItem('royal3DName');
+            if(savedName) document.getElementById('input-name').value = savedName;
+        };
+
+        // Navigasi SPA
+        function switchScreen(targetId) {
             document.querySelectorAll('.screen').forEach(el => el.classList.remove('active'));
-            document.getElementById(id).classList.add('active');
+            document.getElementById(targetId).classList.add('active');
         }
 
-        // --- ALUR HALAMAN ---
-        function enterPalace() {
+        function enterCastle() {
             const input = document.getElementById('input-name').value.trim();
-            if(!input) {
-                butlerSpeak("Mohon ampun, tapi saya harus tahu siapa nama Yang Mulia sebelum membuka gerbang.");
+            if (!input) {
+                alert("Penjaga Istana: 'Sebutkan nama Anda terlebih dahulu!'");
                 return;
             }
             userName = input;
-            butlerSpeak(`Selamat datang kembali di singgasana, Yang Mulia ${userName}.`);
+            localStorage.setItem('royal3DName', userName);
+            
+            document.getElementById('dialogue-mood').innerText = `"Selamat datang kembali, Yang Mulia ${userName}. Kami telah menyiapkan ruangan Anda. Bagaimana suasana hati Anda hari ini?"`;
             switchScreen('screen-mood');
         }
 
-        function selectMood(mood, type) {
+        function selectMood(mood, element, dialogue) {
             currentMood = mood;
-            let actionDiv = document.getElementById('action-buttons');
-            let btnGame = document.getElementById('btn-game');
-            actionDiv.style.display = "flex";
-
-            if(type === 'positif' || type === 'netral') {
-                butlerSpeak("Kabar yang sangat menyejukkan hati. Kertas gulungan sudah hamba siapkan.");
-                btnGame.style.display = "none";
-            } else {
-                butlerSpeak("Tampaknya awan gelap sedang menyelimuti Anda. Ingin menulis langsung, atau ingin hamba siapkan Arena Latihan untuk melampiaskan stres?");
-                btnGame.style.display = "block"; // Tampilkan tombol game
-            }
+            document.querySelectorAll('.mood-btn').forEach(btn => btn.classList.remove('selected'));
+            element.classList.add('selected');
+            
+            // Ubah dialog pelayan istana
+            document.getElementById('dialogue-mood').innerText = `"${dialogue}"`;
+            document.getElementById('btn-lanjut').style.display = 'block';
         }
 
-        function openScroll() {
-            switchScreen('screen-journal');
-            butlerSpeak("Menulislah dengan bebas, Yang Mulia. Tidak ada yang akan menghakimi di bilik ini.");
+        function goToJournal() { switchScreen('screen-journal'); }
+        function goHome() { 
+            currentMood = "";
+            document.querySelectorAll('.mood-btn').forEach(btn => btn.classList.remove('selected'));
+            document.getElementById('btn-lanjut').style.display = 'none';
+            document.getElementById('dialogue-mood').innerText = `"Apakah ada hal lain yang ingin disuarakan, Yang Mulia ${userName}?"`;
+            switchScreen('screen-mood'); 
         }
 
+        // Animasi Segel & Simpan
         function sealJournal() {
-            let text = document.getElementById('journal-text').value.trim();
-            if(!text) {
-                butlerSpeak("Gulungan masih bersih tanpa goresan tinta, Yang Mulia.");
+            const text = document.getElementById('journal-text').value.trim();
+            if (!text) {
+                alert("Kertasnya masih kosong, Yang Mulia.");
                 return;
             }
-            // Di sini kamu bisa tambahkan logika simpan ke LocalStorage seperti kode sebelumnya
-            butlerSpeak("Titah Anda telah disimpan dengan aman di Arsip Kerajaan. Istirahatlah yang tenang, Yang Mulia.");
+
+            const dateStr = new Date().toLocaleDateString('id-ID', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
+            journalData.push({ id: Date.now(), date: dateStr, mood: currentMood, content: text });
+            localStorage.setItem('royal3DDiaryEntries', JSON.stringify(journalData));
             document.getElementById('journal-text').value = '';
+
+            switchScreen('screen-sealing');
+            const env = document.getElementById('envelope-anim');
+            const opts = document.getElementById('sealing-options');
             
-            // Kembali ke layar awal setelah 4 detik
-            setTimeout(() => {
-                switchScreen('screen-landing');
-                butlerSpeak("Sampai jumpa lagi. Pintu Istana selalu terbuka untuk Anda.");
-                document.getElementById('action-buttons').style.display = 'none';
-            }, 4000);
+            env.classList.remove('sealing-active');
+            opts.style.opacity = 0;
+
+            setTimeout(() => { env.classList.add('sealing-active'); }, 500);
+            setTimeout(() => { opts.style.opacity = 1; }, 2000);
         }
 
-        // --- MINI GAME: USIR KESEDIHAN ---
-        let gameInterval;
-        let score = 0;
+        // Arsip Amplop 3D
+        function goToArchive() {
+            const wall = document.getElementById('archive-wall');
+            wall.innerHTML = '';
+
+            if(journalData.length === 0) {
+                wall.innerHTML = "<h3 style='width:100%;'>Belum ada titah yang diarsipkan.</h3>";
+            } else {
+                const reversed = [...journalData].reverse();
+                reversed.forEach(entry => {
+                    const env = document.createElement('div');
+                    env.className = 'archive-envelope';
+                    const emoji = entry.mood.split(' ')[0];
+                    env.innerHTML = `<div class="env-mood">${emoji}</div><div class="env-date">${entry.date.split(',')[1]}</div>`;
+                    env.onclick = () => openModal(entry);
+                    wall.appendChild(env);
+                });
+            }
+            switchScreen('screen-archive');
+        }
+
+        function openModal(entry) {
+            document.getElementById('modal-title').innerText = `${entry.date} ${entry.mood.split(' ')[0]}`;
+            document.getElementById('modal-content').innerText = entry.content;
+            document.getElementById('archive-modal').classList.add('active');
+        }
+        function closeModal() { document.getElementById('archive-modal').classList.remove('active'); }
+
+        // === MINI GAME LOGIC (Hiburan Istana) ===
+        let gameScore = 0;
+        let gameTime = 15;
+        let gameInterval, dropInterval;
+        const items = ['💎', '👑', '💍', '💰'];
+
+        function openGame() { switchScreen('screen-game'); }
 
         function startGame() {
-            switchScreen('screen-game');
-            butlerSpeak("Basmi monster stres itu dengan sentuhan jari Anda, Yang Mulia!");
-            score = 0;
-            document.getElementById('game-score').innerText = score;
-            document.getElementById('game-area').innerHTML = ''; // Bersihkan arena
-            
-            gameInterval = setInterval(spawnMonster, 800);
+            document.getElementById('btn-start-game').style.display = 'none';
+            document.getElementById('game-area').innerHTML = '';
+            gameScore = 0; gameTime = 15;
+            updateGameUI();
+
+            gameInterval = setInterval(() => {
+                gameTime--; updateGameUI();
+                if(gameTime <= 0) endGame();
+            }, 1000);
+
+            dropInterval = setInterval(createJewel, 400);
         }
 
-        function spawnMonster() {
+        function createJewel() {
             const area = document.getElementById('game-area');
-            const monster = document.createElement('div');
-            monster.className = 'gloom-monster';
-            
-            // Random Emoji Monster
-            const emojis = ['🦇', '🕷️', '🌩️', '👹'];
-            monster.innerText = emojis[Math.floor(Math.random() * emojis.length)];
-            
-            // Posisi acak
-            let maxX = area.clientWidth - 50;
-            let maxY = area.clientHeight - 50;
-            monster.style.left = Math.floor(Math.random() * maxX) + 'px';
-            monster.style.top = Math.floor(Math.random() * maxY) + 'px';
-            
-            // Event ketika diklik
-            monster.onclick = function() {
-                this.innerText = '✨'; // Berubah jadi bintang
-                this.style.transform = 'scale(1.5)';
-                this.style.opacity = '0'; // Menghilang
-                score++;
-                document.getElementById('game-score').innerText = score;
-                
-                setTimeout(() => this.remove(), 300);
+            const jewel = document.createElement('div');
+            jewel.className = 'jewel';
+            jewel.innerText = items[Math.floor(Math.random() * items.length)];
+            jewel.style.left = Math.random() * (area.clientWidth - 40) + 'px';
+            jewel.style.top = '-50px';
+            area.appendChild(jewel);
 
-                if(score >= 10) {
-                    endGame();
-                    butlerSpeak("Luar biasa! Hamba yakin pikiran Anda sudah jauh lebih jernih sekarang. Mari kita kembali menulis.");
+            let posY = -50;
+            const fall = setInterval(() => {
+                posY += 5;
+                jewel.style.top = posY + 'px';
+                if(posY > area.clientHeight) {
+                    clearInterval(fall);
+                    if(jewel.parentNode) jewel.remove();
                 }
+            }, 30);
+
+            jewel.onmousedown = () => {
+                gameScore += 10;
+                updateGameUI();
+                clearInterval(fall);
+                jewel.style.transform = 'scale(2)';
+                jewel.style.opacity = '0';
+                setTimeout(() => { if(jewel.parentNode) jewel.remove(); }, 200);
             };
-            
-            area.appendChild(monster);
-            
-            // Monster hilang sendiri setelah 2 detik kalau tidak diklik
-            setTimeout(() => {
-                if(monster.parentNode) monster.remove();
-            }, 2000);
+        }
+
+        function updateGameUI() {
+            document.getElementById('game-score').innerText = gameScore;
+            document.getElementById('game-time').innerText = gameTime;
         }
 
         function endGame() {
             clearInterval(gameInterval);
-            document.getElementById('game-area').innerHTML = '';
-            openScroll(); // Langsung pindah ke jurnal
+            clearInterval(dropInterval);
+            document.getElementById('game-area').innerHTML = `<h2 style="margin-top: 20vh;">Waktu Habis!<br>Skor: ${gameScore}</h2>`;
+            document.getElementById('btn-start-game').innerText = "Main Lagi";
+            document.getElementById('btn-start-game').style.display = 'block';
         }
-
     </script>
 </body>
 </html>
