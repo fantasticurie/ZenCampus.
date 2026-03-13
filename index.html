@@ -1,0 +1,414 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ZenCampus | Hub Produktivitas & Mental Health</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap');
+
+        /* --- COLOR PALETTE & VARIABLES --- */
+        :root {
+            --bg-sand: #F4F1DE;
+            --card-light: #FDFCF8;
+            --sage-green: #A3B18A;
+            --sage-dark: #8A9A70;
+            --muted-navy: #264653;
+            --glass-bg: rgba(253, 252, 248, 0.65);
+            --shadow-soft: 0 8px 30px rgba(38, 70, 83, 0.06);
+            --radius-lg: 20px;
+            --radius-md: 12px;
+            --transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+        }
+
+        /* --- GLOBAL RESET & TYPOGRAPHY --- */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-sand);
+            color: var(--muted-navy);
+            line-height: 1.6;
+            padding-top: 80px; /* Space for fixed header */
+        }
+
+        h1, h2, h3 {
+            font-weight: 600;
+        }
+
+        p {
+            font-weight: 300;
+        }
+
+        /* --- HEADER (GLASSMORPHISM) --- */
+        header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 70px;
+            background: var(--glass-bg);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+            border-bottom: 1px solid rgba(163, 177, 138, 0.2);
+            box-shadow: 0 4px 10px rgba(0,0,0,0.02);
+        }
+
+        header h1 {
+            color: var(--sage-dark);
+            font-size: 1.5rem;
+            letter-spacing: 1px;
+        }
+
+        /* --- LAYOUT CONTAINER --- */
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 30px;
+        }
+
+        /* --- CARDS STYLING --- */
+        .card {
+            background-color: var(--card-light);
+            border-radius: var(--radius-lg);
+            padding: 25px;
+            box-shadow: var(--shadow-soft);
+            transition: var(--transition);
+        }
+
+        .card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 12px 35px rgba(38, 70, 83, 0.1);
+        }
+
+        .card-header {
+            margin-bottom: 15px;
+        }
+
+        .card-header h2 {
+            font-size: 1.2rem;
+            color: var(--muted-navy);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .card-header p {
+            font-size: 0.85rem;
+            opacity: 0.8;
+            margin-top: 5px;
+        }
+
+        /* --- BUTTONS & INPUTS --- */
+        button {
+            background-color: var(--sage-green);
+            color: var(--card-light);
+            border: none;
+            padding: 12px 20px;
+            border-radius: var(--radius-md);
+            font-weight: 500;
+            font-size: 0.95rem;
+            cursor: pointer;
+            transition: var(--transition);
+            width: 100%;
+        }
+
+        button:hover {
+            background-color: var(--sage-dark);
+            box-shadow: 0 4px 15px rgba(163, 177, 138, 0.4);
+        }
+
+        input, select {
+            width: 100%;
+            padding: 12px 15px;
+            border: 2px solid transparent;
+            background-color: var(--bg-sand);
+            border-radius: var(--radius-md);
+            color: var(--muted-navy);
+            font-size: 0.9rem;
+            outline: none;
+            transition: var(--transition);
+            margin-bottom: 15px;
+        }
+
+        input:focus, select:focus {
+            border-color: var(--sage-green);
+            background-color: var(--card-light);
+        }
+
+        input::placeholder {
+            color: rgba(38, 70, 83, 0.4);
+        }
+
+        /* --- FEATURE 1: VIBE CHECK --- */
+        .emoji-grid {
+            display: flex;
+            justify-content: space-between;
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+
+        .emoji-btn {
+            background-color: var(--bg-sand);
+            font-size: 1.8rem;
+            padding: 15px;
+            border-radius: var(--radius-lg);
+            transition: var(--transition);
+        }
+
+        .emoji-btn:hover {
+            background-color: var(--sage-green);
+            transform: scale(1.05);
+        }
+
+        .vibe-message {
+            background-color: var(--bg-sand);
+            padding: 15px;
+            border-radius: var(--radius-md);
+            font-size: 0.9rem;
+            text-align: center;
+            display: none; /* Hidden default */
+            animation: fadeIn 0.4s ease forwards;
+            border-left: 4px solid var(--sage-green);
+        }
+
+        /* --- FEATURE 2: SIDE-HUSTLE MATCHER --- */
+        .result-box {
+            margin-top: 15px;
+            background-color: var(--bg-sand);
+            padding: 15px;
+            border-radius: var(--radius-md);
+            font-size: 0.9rem;
+            display: none;
+            animation: fadeIn 0.4s ease forwards;
+        }
+
+        .result-box strong {
+            color: var(--sage-dark);
+        }
+
+        /* --- FEATURE 3: STUDY PLANNER --- */
+        .planner-group {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+
+        .planner-group input[type="text"] {
+            flex: 2;
+            margin-bottom: 0;
+        }
+
+        .planner-group input[type="number"] {
+            flex: 1;
+            margin-bottom: 0;
+        }
+
+        ul.schedule-list {
+            list-style: none;
+            margin-top: 15px;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        ul.schedule-list li {
+            background-color: var(--bg-sand);
+            padding: 12px 15px;
+            border-radius: var(--radius-md);
+            font-size: 0.9rem;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            animation: fadeIn 0.3s ease;
+        }
+
+        ul.schedule-list li.break-time {
+            background-color: rgba(163, 177, 138, 0.2);
+            color: var(--sage-dark);
+            font-style: italic;
+        }
+
+        /* --- ANIMATIONS --- */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(5px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Responsive Check */
+        @media (max-width: 480px) {
+            .planner-group {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1>🌱 ZenCampus</h1>
+    </header>
+
+    <div class="container">
+        
+        <section class="card">
+            <div class="card-header">
+                <h2>Daily Vibe Check ✨</h2>
+                <p>Gimana perasaanmu hari ini? Jujur aja, nggak ada yang nilai kok.</p>
+            </div>
+            <div class="emoji-grid">
+                <button class="emoji-btn" onclick="checkVibe('senang')">😊</button>
+                <button class="emoji-btn" onclick="checkVibe('burnout')">😮‍💨</button>
+                <button class="emoji-btn" onclick="checkVibe('cemas')">😟</button>
+                <button class="emoji-btn" onclick="checkVibe('tidur')">😴</button>
+            </div>
+            <div id="vibeResponse" class="vibe-message"></div>
+        </section>
+
+        <section class="card">
+            <div class="card-header">
+                <h2>Side-Hustle Matcher 💼</h2>
+                <p>Cari ide cuan tambahan yang *make sense* sama jurusan dan hobimu.</p>
+            </div>
+            <select id="fakultas">
+                <option value="" disabled selected>Pilih Fakultas / Rumpunmu...</option>
+                <option value="soshum">Sosial Humaniora (Soshum)</option>
+                <option value="saintek">Sains & Teknologi (Saintek)</option>
+                <option value="seni">Seni & Desain</option>
+            </select>
+            <input type="text" id="hobi" placeholder="Apa hobimu? (Misal: nulis, main game, ngedit)">
+            <button onclick="matchHustle()">Cari Cuan</button>
+            <div id="hustleResult" class="result-box"></div>
+        </section>
+
+        <section class="card">
+            <div class="card-header">
+                <h2>Anti-Burnout Planner 📝</h2>
+                <p>Belajar cerdas, bukan keras. Kita selipin waktu istirahat otomatis buatmu.</p>
+            </div>
+            <div class="planner-group">
+                <input type="text" id="namaTugas" placeholder="Nama Tugas (ex: Jurnal, Koding)">
+                <input type="number" id="waktuTugas" placeholder="Est. Jam" min="0.5" step="0.5">
+            </div>
+            <button onclick="addSchedule()">Buat Jadwal Santai</button>
+            <ul id="scheduleList" class="schedule-list">
+                </ul>
+        </section>
+
+    </div>
+
+    <script>
+        // --- LOGIC 1: Daily Vibe Check ---
+        function checkVibe(mood) {
+            const responseBox = document.getElementById('vibeResponse');
+            let message = "";
+
+            if (mood === 'senang') {
+                message = "Mantap! Jaga energi positifnya ya, tapi jangan lupa minum air putih dan *stay hydrated*.";
+            } else if (mood === 'burnout') {
+                message = "Tarik napas 5 detik... Hembuskan. Tinggalkan tugasmu sebentar, kamu berhak istirahat. Mau dengar lofi hip-hop?";
+            } else if (mood === 'cemas') {
+                message = "Nggak apa-apa merasa cemas. Peluk jauh buat kamu 🤗. Yuk, tutup layar sejenak dan jalan-jalan ambil angin segar.";
+            } else if (mood === 'tidur') {
+                message = "Kasur memanggil tuh! Jangan forsir dirimu. Tidur yang cukup itu investasi masa depan, lho. Yuk rebahan dulu.";
+            }
+
+            responseBox.innerHTML = message;
+            responseBox.style.display = "block";
+            
+            // Re-trigger animation
+            responseBox.style.animation = 'none';
+            responseBox.offsetHeight; 
+            responseBox.style.animation = null;
+        }
+
+        // --- LOGIC 2: Side-Hustle Matcher ---
+        function matchHustle() {
+            const fakultas = document.getElementById('fakultas').value;
+            const hobi = document.getElementById('hobi').value.toLowerCase();
+            const resultBox = document.getElementById('hustleResult');
+
+            if (!fakultas) {
+                alert("Pilih fakultasnya dulu, ya!");
+                return;
+            }
+
+            let role = "";
+            let tools = "";
+
+            if (fakultas === 'soshum') {
+                if (hobi.includes('nulis') || hobi.includes('baca')) {
+                    role = "AI Copywriter / Content Writer";
+                    tools = "Gemini, Notion, & Grammarly";
+                } else {
+                    role = "Social Media Manager / Virtual Assistant";
+                    tools = "Canva, Buffer, & Trello";
+                }
+            } else if (fakultas === 'saintek') {
+                if (hobi.includes('game') || hobi.includes('komputer')) {
+                    role = "Freelance Web Developer / Game Tester";
+                    tools = "VS Code, GitHub, & Figma";
+                } else {
+                    role = "Data Entry Specialist / Tech Tutor";
+                    tools = "Excel, Google Colab, & Discord";
+                }
+            } else if (fakultas === 'seni') {
+                role = "Digital Illustrator / UI/UX Enthusiast";
+                tools = "Figma, Procreate, atau Adobe Illustrator";
+            }
+
+            resultBox.innerHTML = `Wah, keren! Dari profilmu, sepertinya kamu <strong>Cocok jadi: ${role}</strong>.<br><br>🛠️ Tools yang wajib dicoba: <strong>${tools}</strong>.`;
+            resultBox.style.display = "block";
+        }
+
+        // --- LOGIC 3: Anti-Burnout Study Planner ---
+        function addSchedule() {
+            const namaTugas = document.getElementById('namaTugas').value;
+            const waktuTugas = document.getElementById('waktuTugas').value;
+            const scheduleList = document.getElementById('scheduleList');
+
+            if (!namaTugas || !waktuTugas) {
+                alert("Isi nama tugas dan waktunya dulu, yuk!");
+                return;
+            }
+
+            // Task Item
+            const taskItem = document.createElement('li');
+            taskItem.innerHTML = `📚 <strong>${namaTugas}</strong> - Fokus selama ${waktuTugas} Jam`;
+            
+            // Break Item (Randomized for fun)
+            const breakItem = document.createElement('li');
+            breakItem.className = 'break-time';
+            
+            const breakIdeas = [
+                "Jeda Main Sosmed (15 Menit)",
+                "Stretching Time! Regangkan badanmu (10 Menit)",
+                "Bikin teh atau kopi hangat (15 Menit)",
+                "Pejamkan mata, dengar 3 lagu favorit (10 Menit)"
+            ];
+            const randomBreak = breakIdeas[Math.floor(Math.random() * breakIdeas.length)];
+            
+            breakItem.innerHTML = `🧘‍♀️ <em>${randomBreak}</em>`;
+
+            // Append to list
+            scheduleList.appendChild(taskItem);
+            scheduleList.appendChild(breakItem);
+
+            // Clear inputs
+            document.getElementById('namaTugas').value = '';
+            document.getElementById('waktuTugas').value = '';
+        }
+    </script>
+</body>
+</html>
