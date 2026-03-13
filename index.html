@@ -6,13 +6,13 @@
     <title>The Royal 3D Diary</title>
     <style>
         /* === IMPORT FONTS === */
-        /* Cinzel untuk nuansa Kerajaan, Dancing Script untuk Lettering curahan hati */
-        @import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@500;700&family=Dancing+Script:wght@600;700&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;700&family=Dancing+Script:wght@600;700&display=swap');
 
         /* === COLOR PALETTE & VARIABLES === */
         :root {
             --royal-gold: #FFD700;
             --royal-gold-dark: #B8860B;
+            --royal-gold-light: #FFF8DC;
             --royal-red: #800000;
             --royal-red-dark: #4A0000;
             --parchment: #FDF5E6;
@@ -24,35 +24,65 @@
             box-sizing: border-box;
             margin: 0;
             padding: 0;
-            user-select: none; /* Mencegah seleksi teks yang tidak disengaja */
+            user-select: none;
         }
 
-        /* === 3D BRICK WALL BACKGROUND === */
+        /* === 3D BRICK WALL BACKGROUND & AMBIENT === */
         body {
             font-family: 'Cinzel', serif;
-            color: var(--royal-gold);
+            color: var(--royal-gold-light);
             overflow: hidden;
             height: 100vh;
             display: flex;
             justify-content: center;
             align-items: center;
-            /* Dinding Bata Kerajaan */
-            background-color: #5e2c23;
+            background-color: #3b1b15;
             background-image: 
-                linear-gradient(335deg, rgba(0,0,0,0.6) 2px, transparent 2px),
-                linear-gradient(155deg, rgba(0,0,0,0.6) 2px, transparent 2px),
-                linear-gradient(335deg, rgba(0,0,0,0.3) 1px, transparent 1px),
-                linear-gradient(155deg, rgba(0,0,0,0.3) 1px, transparent 1px);
+                linear-gradient(335deg, rgba(0,0,0,0.7) 2px, transparent 2px),
+                linear-gradient(155deg, rgba(0,0,0,0.7) 2px, transparent 2px),
+                linear-gradient(335deg, rgba(0,0,0,0.4) 1px, transparent 1px),
+                linear-gradient(155deg, rgba(0,0,0,0.4) 1px, transparent 1px);
             background-size: 80px 40px, 80px 40px, 20px 20px, 20px 20px;
             background-position: 0 0, 40px 20px, 0 0, 10px 10px;
-            box-shadow: inset 0 0 150px rgba(0,0,0,0.9); /* Efek vignette gelap ruangan istana */
+            box-shadow: inset 0 0 200px rgba(0,0,0,0.95);
+        }
+
+        /* Magic Particles */
+        .particles-container {
+            position: absolute;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            pointer-events: none;
+            z-index: 0;
+        }
+        .particle {
+            position: absolute;
+            background: radial-gradient(circle, var(--royal-gold) 0%, transparent 70%);
+            border-radius: 50%;
+            opacity: 0;
+            animation: floatParticle 8s infinite ease-in-out;
+        }
+        @keyframes floatParticle {
+            0% { transform: translateY(100px) scale(0.5); opacity: 0; }
+            50% { opacity: 0.6; }
+            100% { transform: translateY(-100px) scale(1.2); opacity: 0; }
         }
 
         h1, h2, h3 {
-            text-shadow: 2px 2px 4px rgba(0,0,0,0.8);
+            text-shadow: 0 4px 15px rgba(0,0,0,0.9), 0 0 20px rgba(255, 215, 0, 0.3);
             text-align: center;
             margin-bottom: 20px;
-            letter-spacing: 2px;
+            letter-spacing: 3px;
+        }
+
+        h1 {
+            font-size: 3rem;
+            animation: breatheText 4s infinite alternate ease-in-out;
+        }
+
+        @keyframes breatheText {
+            0% { text-shadow: 0 4px 15px rgba(0,0,0,0.9), 0 0 10px rgba(255, 215, 0, 0.2); }
+            100% { text-shadow: 0 4px 15px rgba(0,0,0,0.9), 0 0 30px rgba(255, 215, 0, 0.6); }
         }
 
         /* === SPA SCREEN TRANSITIONS === */
@@ -66,9 +96,10 @@
             align-items: center;
             opacity: 0;
             pointer-events: none;
-            transition: opacity 0.8s ease, transform 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            transform: translateZ(-500px) scale(0.8);
-            perspective: 1000px;
+            transition: opacity 1s ease, transform 1s cubic-bezier(0.25, 1, 0.5, 1);
+            transform: translateZ(-200px) scale(0.95);
+            perspective: 1200px;
+            z-index: 1;
         }
 
         .screen.active {
@@ -78,89 +109,133 @@
             z-index: 10;
         }
 
-        /* === 3D BUTTONS === */
+        /* === 3D BUTTONS (Softened) === */
         .btn-royal {
-            background: linear-gradient(to bottom, var(--royal-gold), var(--royal-gold-dark));
+            background: linear-gradient(135deg, var(--royal-gold), #DAA520);
             color: var(--royal-red-dark);
-            border: 2px solid #fff;
-            padding: 15px 30px;
+            border: none;
+            padding: 15px 35px;
             font-size: 18px;
             font-family: 'Cinzel', serif;
             font-weight: 700;
-            border-radius: 5px;
+            border-radius: 8px;
             cursor: pointer;
-            box-shadow: 0 10px 20px rgba(0,0,0,0.5), inset 0 -3px 5px rgba(0,0,0,0.3);
-            transition: all 0.2s;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.6), inset 0 2px 5px rgba(255,255,255,0.5), inset 0 -3px 5px rgba(0,0,0,0.2);
+            transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
             margin: 10px;
             text-transform: uppercase;
+            letter-spacing: 1px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn-royal::after {
+            content: '';
+            position: absolute;
+            top: -50%; left: -50%;
+            width: 200%; height: 200%;
+            background: linear-gradient(to right, rgba(255,255,255,0) 0%, rgba(255,255,255,0.3) 50%, rgba(255,255,255,0) 100%);
+            transform: rotate(45deg) translateX(-100%);
+            transition: transform 0.6s;
+        }
+
+        .btn-royal:hover::after {
+            transform: rotate(45deg) translateX(100%);
         }
 
         .btn-royal:hover {
-            transform: translateY(-5px) scale(1.05);
-            box-shadow: 0 15px 25px rgba(0,0,0,0.7), inset 0 -3px 5px rgba(0,0,0,0.3);
+            transform: translateY(-3px) scale(1.03);
+            box-shadow: 0 15px 35px rgba(0,0,0,0.8), 0 0 15px rgba(255, 215, 0, 0.4);
         }
 
         .btn-royal:active {
             transform: translateY(2px);
-            box-shadow: 0 5px 10px rgba(0,0,0,0.5), inset 0 3px 5px rgba(0,0,0,0.3);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.6);
         }
 
-        /* === ROYAL FAMILY / ATTENDANTS (Pelayanan Istana) === */
+        /* === ROYAL FAMILY / ATTENDANTS (Glassmorphism) === */
         .attendant-card {
-            background: rgba(0, 0, 0, 0.6);
-            border: 2px solid var(--royal-gold);
-            padding: 20px;
-            border-radius: 15px;
+            background: rgba(43, 24, 16, 0.65);
+            border: 1px solid rgba(255, 215, 0, 0.3);
+            padding: 25px;
+            border-radius: 20px;
             display: flex;
             align-items: center;
-            gap: 20px;
-            margin-bottom: 30px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
-            backdrop-filter: blur(5px);
-            max-width: 600px;
+            gap: 25px;
+            margin-bottom: 40px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.6), inset 0 0 20px rgba(255,215,0,0.05);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            max-width: 650px;
             transform: translateZ(50px);
+            transition: transform 0.4s ease;
+        }
+
+        .attendant-card:hover {
+            transform: translateZ(60px) scale(1.02);
         }
 
         .attendant-avatar {
-            font-size: 60px;
-            filter: drop-shadow(0 0 10px var(--royal-gold));
-            animation: float 3s ease-in-out infinite;
+            font-size: 65px;
+            filter: drop-shadow(0 5px 15px rgba(255, 215, 0, 0.4));
+            animation: floatAvatar 3s ease-in-out infinite;
         }
 
         .attendant-dialogue {
             font-size: 20px;
-            line-height: 1.5;
-            color: #fff;
+            line-height: 1.6;
+            color: var(--royal-gold-light);
+            font-style: italic;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.8);
         }
 
-        @keyframes float {
-            0%, 100% { transform: translateY(0); }
-            50% { transform: translateY(-10px); }
+        @keyframes floatAvatar {
+            0%, 100% { transform: translateY(0) rotate(0deg); }
+            50% { transform: translateY(-8px) rotate(3deg); }
         }
 
         /* === SCREEN 1: LANDING === */
         .parchment-input {
-            width: 300px;
-            padding: 15px;
-            font-size: 20px;
+            width: 320px;
+            padding: 18px;
+            font-size: 22px;
             font-family: 'Cinzel', serif;
             text-align: center;
-            background: var(--parchment);
-            border: 3px solid var(--royal-gold-dark);
+            background: linear-gradient(135deg, var(--parchment), #f5e4c3);
+            border: 2px solid var(--royal-gold-dark);
             color: var(--royal-red-dark);
             font-weight: bold;
-            border-radius: 5px;
-            box-shadow: inset 0 0 10px rgba(0,0,0,0.5);
+            border-radius: 8px;
+            box-shadow: inset 0 3px 10px rgba(0,0,0,0.3), 0 5px 15px rgba(0,0,0,0.5);
             outline: none;
-            margin-bottom: 20px;
+            margin-bottom: 30px;
+            transition: all 0.3s;
+        }
+        
+        .parchment-input:focus {
+            box-shadow: inset 0 3px 10px rgba(0,0,0,0.3), 0 0 20px rgba(255, 215, 0, 0.5);
+            border-color: var(--royal-gold);
         }
 
-        /* === SCREEN TAMBAHAN: GERBANG 3D === */
+        /* === SCREEN TAMBAHAN: GERBANG 3D (Walkthrough Effect) === */
+        .gate-wrapper {
+            position: relative;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            transition: transform 3s cubic-bezier(0.5, 0, 0.2, 1), opacity 2s 1.5s;
+        }
+        
+        .gate-wrapper.walkthrough {
+            transform: scale(2.5);
+            opacity: 0;
+        }
+
         .gate-container {
             position: relative;
-            width: 320px;
-            height: 450px;
-            perspective: 1200px;
+            width: 340px;
+            height: 480px;
+            perspective: 1500px;
             z-index: 10;
         }
         .gate-door {
@@ -168,110 +243,134 @@
             top: 0;
             width: 50%;
             height: 100%;
-            background: linear-gradient(to right, #4A2511, #2B150A);
-            border: 4px solid var(--royal-gold-dark);
+            background: linear-gradient(to right, #3A1B0B, #1A0A04);
+            border: 5px solid var(--royal-gold-dark);
             transition: transform 2.5s cubic-bezier(0.4, 0, 0.2, 1);
             transform-style: preserve-3d;
-            box-shadow: inset 0 0 20px #000, 0 10px 30px rgba(0,0,0,0.8);
+            box-shadow: inset 0 0 30px #000, 0 15px 40px rgba(0,0,0,0.9);
         }
-        .gate-door::before { /* Ukiran dalam gerbang */
-            content: ''; position: absolute; top: 10px; bottom: 10px; left: 10px; right: 10px;
-            border: 2px dashed var(--royal-gold); border-radius: 10px 10px 0 0;
+        .gate-door::before { 
+            content: ''; position: absolute; top: 15px; bottom: 15px; left: 15px; right: 15px;
+            border: 2px dashed rgba(255, 215, 0, 0.5); border-radius: 15px 15px 0 0;
         }
-        .left-door { left: 0; transform-origin: left; border-right: 2px solid var(--royal-gold); border-radius: 20px 0 0 0;}
-        .right-door { right: 0; transform-origin: right; border-left: 2px solid var(--royal-gold); border-radius: 0 20px 0 0; background: linear-gradient(to left, #4A2511, #2B150A);}
+        /* Ornamen gagang pintu */
+        .gate-door::after {
+            content: ''; position: absolute; top: 50%; width: 20px; height: 20px;
+            background: var(--royal-gold); border-radius: 50%;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.8), inset 0 2px 5px rgba(255,255,255,0.5);
+        }
+        .left-door { left: 0; transform-origin: left; border-right: 2px solid var(--royal-gold); border-radius: 25px 0 0 0;}
+        .left-door::after { right: 15px; }
+        .right-door { right: 0; transform-origin: right; border-left: 2px solid var(--royal-gold); border-radius: 0 25px 0 0; background: linear-gradient(to left, #3A1B0B, #1A0A04);}
+        .right-door::after { left: 15px; }
         
         /* Animasi Terbuka */
-        .gate-open .left-door { transform: rotateY(-110deg); }
-        .gate-open .right-door { transform: rotateY(110deg); }
+        .gate-open .left-door { transform: rotateY(-105deg); }
+        .gate-open .right-door { transform: rotateY(105deg); }
         
         #welcome-gate-text {
-            position: absolute; top: 15%; font-size: 36px;
-            color: var(--royal-gold); text-shadow: 0 0 20px var(--royal-gold);
-            opacity: 0; transform: translateY(20px); transition: all 1.5s 0.5s; z-index: 20;
+            position: absolute; top: 10%; font-size: 40px;
+            color: var(--royal-gold); text-shadow: 0 0 30px var(--royal-gold), 0 5px 10px rgba(0,0,0,0.9);
+            opacity: 0; transform: translateY(30px) scale(0.9); transition: all 1.5s 0.5s cubic-bezier(0.25, 1, 0.5, 1); z-index: 20;
         }
-        .gate-open-text { opacity: 1 !important; transform: translateY(0) !important; }
+        .gate-open-text { opacity: 1 !important; transform: translateY(0) scale(1) !important; }
         
         .castle-glow {
             position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
-            width: 10px; height: 10px; border-radius: 50%;
+            width: 2px; height: 2px; border-radius: 50%;
             box-shadow: 0 0 0px 0px rgba(255, 215, 0, 0); opacity: 0;
-            transition: box-shadow 2.5s, opacity 2s; z-index: 1;
+            transition: box-shadow 3s ease-out, opacity 2s; z-index: 1;
         }
         .gate-open ~ .castle-glow {
-            box-shadow: 0 0 300px 300px rgba(255, 215, 0, 0.3); opacity: 1;
+            box-shadow: 0 0 400px 300px rgba(255, 230, 100, 0.8); opacity: 1;
         }
 
         /* === SCREEN 3: MOOD === */
         .mood-grid {
             display: flex;
-            gap: 20px;
-            margin: 20px 0;
-            perspective: 1000px;
+            gap: 25px;
+            margin: 30px 0;
+            perspective: 1200px;
         }
 
         .mood-btn {
-            font-size: 60px;
-            background: rgba(255,255,255,0.1);
-            border: 2px solid var(--royal-gold);
+            font-size: 55px;
+            background: rgba(255,255,255,0.05);
+            border: 2px solid rgba(255, 215, 0, 0.4);
             border-radius: 50%;
-            width: 100px; height: 100px;
+            width: 110px; height: 110px;
+            display: flex; justify-content: center; align-items: center;
             cursor: pointer;
-            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            transition: all 0.5s cubic-bezier(0.25, 1.5, 0.5, 1);
             transform-style: preserve-3d;
-            box-shadow: 0 10px 20px rgba(0,0,0,0.5);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.6), inset 0 0 15px rgba(255,215,0,0.1);
+            backdrop-filter: blur(5px);
         }
 
         .mood-btn:hover {
-            transform: translateZ(30px) scale(1.1) rotateY(15deg);
-            background: rgba(255,215,0,0.3);
+            transform: translateZ(40px) scale(1.15) rotate(5deg);
+            background: rgba(255,215,0,0.15);
+            border-color: var(--royal-gold);
+            box-shadow: 0 15px 35px rgba(0,0,0,0.8), 0 0 20px rgba(255,215,0,0.3);
         }
 
         .mood-btn.selected {
-            transform: translateZ(50px) scale(1.2);
-            background: var(--royal-gold);
-            box-shadow: 0 0 30px var(--royal-gold);
+            transform: translateZ(60px) scale(1.2);
+            background: radial-gradient(circle, rgba(255,215,0,0.4) 0%, rgba(255,215,0,0.1) 100%);
+            border-color: var(--royal-gold);
+            box-shadow: 0 0 40px rgba(255, 215, 0, 0.6), inset 0 0 20px rgba(255,255,255,0.3);
+            animation: pulseGlow 2s infinite alternate;
         }
 
-        /* === SCREEN 4: 3D JOURNAL (Kertas Animasi & Lettering) === */
+        @keyframes pulseGlow {
+            0% { box-shadow: 0 0 30px rgba(255, 215, 0, 0.4); }
+            100% { box-shadow: 0 0 60px rgba(255, 215, 0, 0.8); }
+        }
+
+        /* === SCREEN 4: 3D JOURNAL === */
         .parchment-3d-container {
             position: relative;
             width: 90%;
-            max-width: 700px;
-            height: 60vh;
-            perspective: 1200px;
-            margin-bottom: 20px;
+            max-width: 750px;
+            height: 65vh;
+            perspective: 1500px;
+            margin-bottom: 30px;
         }
 
         .parchment-3d {
             width: 100%;
             height: 100%;
-            background: linear-gradient(135deg, var(--parchment), #E8D3A2);
-            border: 2px solid #C49A45;
+            background: linear-gradient(135deg, var(--parchment), #eaddc0);
+            border: 1px solid #C49A45;
             box-shadow: 
-                -10px 10px 30px rgba(0,0,0,0.8), 
-                inset 0 0 50px rgba(139,69,19,0.3);
-            border-radius: 2px 20px 2px 20px;
-            transform: rotateX(10deg);
+                -15px 15px 40px rgba(0,0,0,0.8), 
+                inset 0 0 60px rgba(139,69,19,0.15);
+            border-radius: 3px 25px 3px 25px;
+            transform: rotateX(15deg);
             transform-origin: top;
-            padding: 40px;
+            padding: 50px;
             position: relative;
-            animation: unroll 1.5s ease-out forwards;
+            opacity: 0;
+        }
+        
+        /* Animasi Kertas Menggulung Buka */
+        .active .parchment-3d {
+            animation: unrollPaper 1.8s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
         }
 
-        /* Roll edges */
         .parchment-3d::before, .parchment-3d::after {
             content: '';
             position: absolute;
-            left: 0; width: 100%; height: 30px;
-            background: linear-gradient(to bottom, #C49A45, var(--parchment));
+            left: 0; width: 100%; height: 35px;
+            background: linear-gradient(to bottom, #b38b3a, var(--parchment));
             border-radius: 50%;
         }
-        .parchment-3d::before { top: -15px; box-shadow: 0 5px 10px rgba(0,0,0,0.5); }
-        .parchment-3d::after { bottom: -15px; background: linear-gradient(to top, #C49A45, var(--parchment)); box-shadow: 0 -5px 10px rgba(0,0,0,0.5); }
+        .parchment-3d::before { top: -17px; box-shadow: 0 8px 15px rgba(0,0,0,0.4); }
+        .parchment-3d::after { bottom: -17px; background: linear-gradient(to top, #b38b3a, var(--parchment)); box-shadow: 0 -8px 15px rgba(0,0,0,0.4); }
 
-        @keyframes unroll {
-            0% { transform: rotateX(80deg) scaleY(0.1); opacity: 0; }
+        @keyframes unrollPaper {
+            0% { transform: rotateX(85deg) scaleY(0.1); opacity: 0; }
+            50% { opacity: 1; }
             100% { transform: rotateX(5deg) scaleY(1); opacity: 1; }
         }
 
@@ -282,154 +381,177 @@
             border: none;
             outline: none;
             resize: none;
-            font-family: 'Dancing Script', cursive; /* FONT LETTERING */
-            font-size: 32px;
-            line-height: 1.6;
+            font-family: 'Dancing Script', cursive;
+            font-size: 34px;
+            line-height: 1.7;
             color: var(--royal-red-dark);
-            text-shadow: 1px 1px 0px rgba(255,255,255,0.5);
+            text-shadow: 1px 1px 0px rgba(255,255,255,0.6);
         }
         textarea.lettering-font::placeholder {
-            color: rgba(74, 0, 0, 0.4);
+            color: rgba(74, 0, 0, 0.3);
         }
 
-        /* === SCREEN 5: 3D ENVELOPE (Arsip & Segel) === */
+        /* === SCREEN 5: 3D ENVELOPE === */
         .envelope-3d {
             position: relative;
-            width: 300px;
-            height: 200px;
-            background: var(--parchment-dark);
-            box-shadow: 0 20px 40px rgba(0,0,0,0.7);
-            margin: 40px 0;
+            width: 320px;
+            height: 220px;
+            background: linear-gradient(135deg, var(--parchment-dark), #d4a95d);
+            box-shadow: 0 25px 50px rgba(0,0,0,0.8), inset 0 0 20px rgba(0,0,0,0.1);
+            margin: 50px 0;
             transform-style: preserve-3d;
-            transform: rotateY(-10deg) rotateX(10deg);
-            transition: transform 1s;
+            transform: rotateY(-15deg) rotateX(15deg);
+            transition: transform 1.2s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
         .envelope-flap {
             position: absolute;
             top: 0; left: 0;
-            border-left: 150px solid transparent;
-            border-right: 150px solid transparent;
-            border-top: 100px solid #D4AF37;
+            border-left: 160px solid transparent;
+            border-right: 160px solid transparent;
+            border-top: 110px solid #c9a330;
             transform-origin: top;
             transform: rotateX(0deg);
-            transition: transform 1s 0.5s;
+            transition: transform 1s 0.3s cubic-bezier(0.4, 0, 0.2, 1);
             z-index: 2;
+            filter: drop-shadow(0 5px 5px rgba(0,0,0,0.3));
         }
 
         .wax-seal-3d {
             position: absolute;
-            top: 80px; left: 120px;
+            top: 85px; left: 130px;
             width: 60px; height: 60px;
-            background: radial-gradient(circle, #ff3333, var(--royal-red-dark));
+            background: radial-gradient(circle at 30% 30%, #ff4d4d, var(--royal-red-dark));
             border-radius: 50%;
-            box-shadow: 0 5px 10px rgba(0,0,0,0.5), inset 0 2px 5px rgba(255,255,255,0.3);
+            box-shadow: 0 8px 15px rgba(0,0,0,0.6), inset 0 3px 8px rgba(255,255,255,0.4);
             display: flex; justify-content: center; align-items: center;
-            font-size: 30px;
+            font-size: 28px;
             color: var(--royal-gold);
             z-index: 3;
             transform: scale(0);
-            transition: transform 0.5s 1.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            opacity: 0;
+            transition: transform 0.6s 1.2s cubic-bezier(0.3, 1.5, 0.5, 1), opacity 0.2s 1.2s;
         }
 
-        .sealing-active .envelope-flap { transform: rotateX(180deg); }
-        .sealing-active .wax-seal-3d { transform: scale(1); }
+        .sealing-active { transform: rotateY(0deg) rotateX(0deg) scale(1.1); }
+        .sealing-active .envelope-flap { transform: rotateX(180deg); z-index: 4; }
+        .sealing-active .wax-seal-3d { transform: scale(1); opacity: 1; z-index: 5;}
 
         /* === SCREEN 6: ARCHIVE WALL === */
         .archive-wall {
             display: flex;
             flex-wrap: wrap;
             justify-content: center;
-            gap: 30px;
+            gap: 40px;
             width: 90%;
-            max-width: 1000px;
-            height: 60vh;
+            max-width: 1100px;
+            height: 65vh;
             overflow-y: auto;
-            padding: 20px;
-            perspective: 1000px;
+            padding: 30px;
+            perspective: 1200px;
         }
 
-        /* Scrollbar styling */
-        .archive-wall::-webkit-scrollbar { width: 10px; }
-        .archive-wall::-webkit-scrollbar-track { background: rgba(0,0,0,0.5); border-radius: 5px; }
-        .archive-wall::-webkit-scrollbar-thumb { background: var(--royal-gold); border-radius: 5px; }
+        .archive-wall::-webkit-scrollbar { width: 12px; }
+        .archive-wall::-webkit-scrollbar-track { background: rgba(0,0,0,0.4); border-radius: 6px; }
+        .archive-wall::-webkit-scrollbar-thumb { background: linear-gradient(var(--royal-gold-dark), var(--royal-gold)); border-radius: 6px; }
 
         .archive-envelope {
             position: relative;
-            width: 200px; height: 130px;
-            background: #D4AF37;
-            box-shadow: 5px 10px 15px rgba(0,0,0,0.6);
+            width: 220px; height: 140px;
+            background: linear-gradient(135deg, #D4AF37, #b89326);
+            box-shadow: 5px 15px 25px rgba(0,0,0,0.7);
             cursor: pointer;
-            transition: transform 0.3s;
+            transition: all 0.4s cubic-bezier(0.25, 1, 0.5, 1);
             display: flex; flex-direction: column; justify-content: flex-end; align-items: center;
-            padding-bottom: 10px;
+            padding-bottom: 15px;
+            border-radius: 2px;
         }
 
         .archive-envelope::before {
             content: ''; position: absolute; top: 0; left: 0;
-            border-left: 100px solid transparent; border-right: 100px solid transparent; border-top: 65px solid #C5A030;
+            border-left: 110px solid transparent; border-right: 110px solid transparent; border-top: 70px solid #C5A030;
+            filter: drop-shadow(0 3px 3px rgba(0,0,0,0.2));
         }
         
-        /* Lilin Arsip */
         .archive-envelope::after {
-            content: '👑'; position: absolute; top: 50px; left: 85px;
-            width: 30px; height: 30px; background: var(--royal-red); border-radius: 50%;
+            content: '👑'; position: absolute; top: 55px; left: 95px;
+            width: 30px; height: 30px; background: radial-gradient(circle, #e62e2e, var(--royal-red-dark)); border-radius: 50%;
             font-size: 14px; display: flex; justify-content: center; align-items: center;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.5); color: gold;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.6), inset 0 2px 4px rgba(255,255,255,0.3); color: var(--royal-gold);
         }
 
-        .archive-envelope:hover { transform: translateY(-10px) scale(1.05); }
+        .archive-envelope:hover { 
+            transform: translateY(-15px) scale(1.08) rotateZ(2deg); 
+            box-shadow: 10px 25px 35px rgba(0,0,0,0.8);
+        }
 
-        .env-date { font-size: 14px; font-weight: bold; color: var(--royal-red-dark); z-index: 1; text-shadow: none;}
-        .env-mood { font-size: 24px; z-index: 1; }
+        .env-date { font-size: 15px; font-weight: bold; color: var(--royal-red-dark); z-index: 1; text-shadow: 1px 1px 0px rgba(255,255,255,0.3);}
+        .env-mood { font-size: 28px; z-index: 1; margin-bottom: 5px; filter: drop-shadow(0 2px 4px rgba(0,0,0,0.4));}
 
         /* === MINI GAME: ROYAL JEWEL DROP === */
-        #screen-game {
-            background: rgba(0,0,0,0.8);
-            backdrop-filter: blur(5px);
-        }
-
         #game-area {
-            position: relative; width: 100%; height: 60vh; border: 4px solid var(--royal-gold);
-            border-radius: 10px; overflow: hidden; background: #2B1810; margin-bottom: 20px;
-            box-shadow: inset 0 0 50px #000;
+            position: relative; width: 100%; height: 60vh; 
+            border: 4px solid var(--royal-gold-dark);
+            border-radius: 15px; overflow: hidden; 
+            background: radial-gradient(circle, #3d2116, #1c0e09);
+            margin-bottom: 25px;
+            box-shadow: inset 0 0 60px rgba(0,0,0,0.9), 0 10px 30px rgba(0,0,0,0.7);
         }
 
         .jewel {
-            position: absolute; font-size: 40px; cursor: pointer; user-select: none;
-            transition: transform 0.1s; filter: drop-shadow(0 0 10px rgba(255,215,0,0.8));
+            position: absolute; font-size: 45px; cursor: pointer; user-select: none;
+            transition: transform 0.15s cubic-bezier(0.25, 1.5, 0.5, 1); 
+            filter: drop-shadow(0 5px 15px rgba(255,215,0,0.6));
         }
-        .jewel:active { transform: scale(0.5); }
+        .jewel:active { transform: scale(0.4) rotate(45deg); opacity: 0.5;}
 
-        .score-board { font-size: 24px; color: var(--royal-gold); background: rgba(0,0,0,0.5); padding: 10px 20px; border-radius: 10px; border: 1px solid var(--royal-gold);}
+        .score-board { 
+            font-size: 22px; color: var(--royal-gold); 
+            background: rgba(43, 24, 16, 0.8); padding: 12px 25px; 
+            border-radius: 12px; border: 1px solid rgba(255, 215, 0, 0.3);
+            backdrop-filter: blur(5px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.5);
+            font-weight: bold;
+            letter-spacing: 1px;
+        }
 
         /* === MODAL ARSIP === */
         .modal {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0,0,0,0.8); display: flex; justify-content: center; align-items: center;
-            opacity: 0; pointer-events: none; transition: opacity 0.4s; z-index: 100; perspective: 1000px;
+            background: rgba(0,0,0,0.85); display: flex; justify-content: center; align-items: center;
+            opacity: 0; pointer-events: none; transition: opacity 0.5s ease; z-index: 100; perspective: 1500px;
+            backdrop-filter: blur(8px);
         }
         .modal.active { opacity: 1; pointer-events: auto; }
         
         .modal-paper {
-            width: 90%; max-width: 500px; background: var(--parchment);
-            padding: 40px; border: 2px solid var(--royal-gold); border-radius: 10px;
-            transform: rotateX(90deg); transition: transform 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            box-shadow: 0 20px 50px rgba(0,0,0,0.8);
+            width: 90%; max-width: 550px; 
+            background: linear-gradient(135deg, var(--parchment), #f0e0c0);
+            padding: 50px; border: 2px solid var(--royal-gold-dark); border-radius: 5px 25px 5px 25px;
+            transform: rotateX(60deg) translateY(100px); opacity: 0; 
+            transition: all 0.7s cubic-bezier(0.25, 1, 0.5, 1);
+            box-shadow: 0 30px 60px rgba(0,0,0,0.9), inset 0 0 30px rgba(139,69,19,0.1);
+            position: relative;
         }
-        .modal.active .modal-paper { transform: rotateX(0deg); }
+        .modal.active .modal-paper { transform: rotateX(0deg) translateY(0); opacity: 1;}
 
         .modal-close {
-            position: absolute; top: 10px; right: 20px; font-size: 30px; cursor: pointer; color: var(--royal-red);
+            position: absolute; top: 15px; right: 25px; font-size: 35px; 
+            cursor: pointer; color: var(--royal-red); opacity: 0.7;
+            transition: all 0.2s;
         }
+        .modal-close:hover { opacity: 1; transform: scale(1.2); }
+        
         .modal-content-text {
-            font-family: 'Dancing Script', cursive; font-size: 28px; color: var(--text-dark);
-            margin-top: 20px; line-height: 1.5; white-space: pre-wrap;
+            font-family: 'Dancing Script', cursive; font-size: 32px; color: var(--text-dark);
+            margin-top: 25px; line-height: 1.6; white-space: pre-wrap;
+            text-shadow: 1px 1px 0px rgba(255,255,255,0.7);
         }
-
     </style>
 </head>
 <body>
+
+    <div class="particles-container" id="particles"></div>
 
     <div id="screen-landing" class="screen active">
         <div class="attendant-card">
@@ -445,15 +567,19 @@
 
     <div id="screen-gate" class="screen">
         <h2 id="welcome-gate-text">Selamat Datang, Yang Mulia</h2>
-        <div class="gate-container" id="gate-container">
-            <div class="gate-door left-door"></div>
-            <div class="gate-door right-door"></div>
+        <div class="gate-wrapper" id="gate-wrapper">
+            <div class="gate-container" id="gate-container">
+                <div class="gate-door left-door"></div>
+                <div class="gate-door right-door"></div>
+            </div>
+            <div class="castle-glow"></div>
         </div>
-        <div class="castle-glow"></div>
     </div>
+
     <div id="screen-mood" class="screen">
         <div class="attendant-card">
-            <div class="attendant-avatar">👸</div> <div class="attendant-dialogue" id="dialogue-mood">
+            <div class="attendant-avatar">👸</div> 
+            <div class="attendant-dialogue" id="dialogue-mood">
                 "Selamat datang kembali. Kami telah menyiapkan ruangan Anda. Bagaimana suasana hati Yang Mulia hari ini?"
             </div>
         </div>
@@ -465,9 +591,9 @@
             <div class="mood-btn" onclick="selectMood('🌪️ Marah', this, 'Keluarkan amarah itu, Yang Mulia! Kertas ini siap menampung kobaran api Anda tanpa menghakimi.')">🌪️</div>
         </div>
 
-        <div style="display: flex; gap: 20px; margin-top: 20px;">
-            <button id="btn-lanjut" class="btn-royal" style="display: none;" onclick="goToJournal()">Tulis Curahan Hati</button>
-            <button class="btn-royal" style="background: linear-gradient(to bottom, #4CAF50, #2E7D32);" onclick="openGame()">Taman Hiburan Istana</button>
+        <div style="display: flex; gap: 20px; margin-top: 30px;">
+            <button id="btn-lanjut" class="btn-royal" style="display: none; background: linear-gradient(135deg, #c49a3c, #8a681c);" onclick="goToJournal()">Tulis Curahan Hati</button>
+            <button class="btn-royal" style="background: linear-gradient(135deg, #4CAF50, #2E7D32); color: #fff;" onclick="openGame()">Taman Hiburan Istana</button>
         </div>
     </div>
 
@@ -487,7 +613,7 @@
             <div class="envelope-flap"></div>
             <div class="wax-seal-3d">👑</div>
         </div>
-        <div id="sealing-options" style="opacity: 0; transition: opacity 1s; display: flex; gap: 20px;">
+        <div id="sealing-options" style="opacity: 0; transition: opacity 1s; display: flex; gap: 20px; margin-top: 20px;">
             <button class="btn-royal" onclick="goHome()">Kembali ke Aula</button>
             <button class="btn-royal" onclick="goToArchive()">Ruang Arsip</button>
         </div>
@@ -495,46 +621,60 @@
 
     <div id="screen-archive" class="screen">
         <h2>Ruang Arsip Rahasia</h2>
-        <p style="margin-bottom: 20px; font-size: 18px; text-shadow: 1px 1px 2px #000;">Seluruh surat yang tersegel aman di balik dinding bata istana ini.</p>
-        <div class="archive-wall" id="archive-wall">
-            </div>
-        <button class="btn-royal" onclick="goHome()">Kembali ke Aula</button>
+        <p style="margin-bottom: 30px; font-size: 20px; text-shadow: 1px 1px 5px rgba(0,0,0,0.8); font-style: italic;">Seluruh surat yang tersegel aman di balik dinding bata istana ini.</p>
+        <div class="archive-wall" id="archive-wall"></div>
+        <button class="btn-royal" style="margin-top: 20px;" onclick="goHome()">Kembali ke Aula</button>
     </div>
 
     <div id="screen-game" class="screen">
-        <div class="attendant-card" style="margin-bottom: 10px;">
-            <div class="attendant-avatar">🤹</div>
-            <div class="attendant-dialogue">
+        <div class="attendant-card" style="margin-bottom: 20px; padding: 15px 25px;">
+            <div class="attendant-avatar" style="font-size: 50px;">🤹</div>
+            <div class="attendant-dialogue" style="font-size: 18px;">
                 "Pikiran sedang suntuk? Mari tangkap permata kerajaan yang jatuh untuk meredakan stres Yang Mulia!"
             </div>
         </div>
-        <div style="display: flex; justify-content: space-between; width: 100%; max-width: 600px; margin-bottom: 10px;">
+        <div style="display: flex; justify-content: space-between; width: 100%; max-width: 650px; margin-bottom: 15px;">
             <div class="score-board">Skor: <span id="game-score">0</span></div>
             <div class="score-board">Waktu: <span id="game-time">15</span>s</div>
         </div>
         <div id="game-area"></div>
         <div style="display: flex; gap: 20px;">
             <button class="btn-royal" id="btn-start-game" onclick="startGame()">Mulai Permainan</button>
-            <button class="btn-royal" onclick="goHome()">Sudahi Permainan</button>
+            <button class="btn-royal" style="background: linear-gradient(135deg, #a32a2a, #661010); color: #fff;" onclick="goHome()">Sudahi Permainan</button>
         </div>
     </div>
 
     <div id="archive-modal" class="modal">
         <div class="modal-paper">
             <span class="modal-close" onclick="closeModal()">✖</span>
-            <h2 id="modal-title" style="color: var(--royal-red-dark); text-shadow: none;">Tanggal</h2>
-            <hr style="border-color: var(--royal-gold); margin: 10px 0;">
+            <h2 id="modal-title" style="color: var(--royal-red-dark); text-shadow: none; margin-bottom: 5px;">Tanggal</h2>
+            <hr style="border-color: var(--royal-gold-dark); margin: 15px 0; opacity: 0.5;">
             <div id="modal-content" class="modal-content-text">Isi surat...</div>
         </div>
     </div>
 
     <script>
+        // === GENERATE PARTICLES ===
+        function createParticles() {
+            const container = document.getElementById('particles');
+            for(let i=0; i<25; i++) {
+                let p = document.createElement('div');
+                p.className = 'particle';
+                p.style.left = Math.random() * 100 + 'vw';
+                p.style.width = Math.random() * 6 + 2 + 'px';
+                p.style.height = p.style.width;
+                p.style.animationDelay = Math.random() * 5 + 's';
+                p.style.animationDuration = Math.random() * 5 + 6 + 's';
+                container.appendChild(p);
+            }
+        }
+        createParticles();
+
         // === STATE & LOGIC ===
         let userName = "";
         let currentMood = "";
         let journalData = [];
 
-        // Inisialisasi Data
         window.onload = () => {
             const savedData = localStorage.getItem('royal3DDiaryEntries');
             if(savedData) journalData = JSON.parse(savedData);
@@ -542,13 +682,11 @@
             if(savedName) document.getElementById('input-name').value = savedName;
         };
 
-        // Navigasi SPA
         function switchScreen(targetId) {
             document.querySelectorAll('.screen').forEach(el => el.classList.remove('active'));
             document.getElementById(targetId).classList.add('active');
         }
 
-        /* LOGIKA BARU UNTUK TRANSISI GERBANG */
         function enterCastle() {
             const input = document.getElementById('input-name').value.trim();
             if (!input) {
@@ -558,28 +696,39 @@
             userName = input;
             localStorage.setItem('royal3DName', userName);
             
-            // Siapkan teks sambutan
             document.getElementById('welcome-gate-text').innerText = `Selamat Datang, Yang Mulia ${userName}`;
             document.getElementById('dialogue-mood').innerText = `"Selamat datang kembali, Yang Mulia ${userName}. Kami telah menyiapkan ruangan Anda. Bagaimana suasana hati Anda hari ini?"`;
             
-            // Beralih ke layar gerbang dulu
             switchScreen('screen-gate');
             
-            // Reset class gerbang agar animasinya bisa diulang kalau user kembali ke layar awal
             const gateContainer = document.getElementById('gate-container');
+            const gateWrapper = document.getElementById('gate-wrapper');
             const welcomeText = document.getElementById('welcome-gate-text');
+            
+            // Reset state
             gateContainer.classList.remove('gate-open');
+            gateWrapper.classList.remove('walkthrough');
             welcomeText.classList.remove('gate-open-text');
 
-            // Mulai animasi buka gerbang
+            // Buka pintu
             setTimeout(() => {
                 gateContainer.classList.add('gate-open');
                 welcomeText.classList.add('gate-open-text');
             }, 600);
 
-            // Setelah animasi selesai (sekitar 3.5 detik), pindah ke ruangan mood
+            // Efek jalan masuk (zoom in)
+            setTimeout(() => {
+                gateWrapper.classList.add('walkthrough');
+            }, 1800);
+
+            // Pindah layar setelah tembus
             setTimeout(() => {
                 switchScreen('screen-mood');
+                // Reset posisi gate diam-diam di background
+                setTimeout(() => {
+                    gateWrapper.classList.remove('walkthrough');
+                    gateContainer.classList.remove('gate-open');
+                }, 1000);
             }, 3800);
         }
 
@@ -588,7 +737,6 @@
             document.querySelectorAll('.mood-btn').forEach(btn => btn.classList.remove('selected'));
             element.classList.add('selected');
             
-            // Ubah dialog pelayan istana
             document.getElementById('dialogue-mood').innerText = `"${dialogue}"`;
             document.getElementById('btn-lanjut').style.display = 'block';
         }
@@ -602,7 +750,6 @@
             switchScreen('screen-mood'); 
         }
 
-        // Animasi Segel & Simpan
         function sealJournal() {
             const text = document.getElementById('journal-text').value.trim();
             if (!text) {
@@ -622,22 +769,25 @@
             env.classList.remove('sealing-active');
             opts.style.opacity = 0;
 
-            setTimeout(() => { env.classList.add('sealing-active'); }, 500);
-            setTimeout(() => { opts.style.opacity = 1; }, 2000);
+            setTimeout(() => { env.classList.add('sealing-active'); }, 600);
+            setTimeout(() => { opts.style.opacity = 1; }, 2400);
         }
 
-        // Arsip Amplop 3D
         function goToArchive() {
             const wall = document.getElementById('archive-wall');
             wall.innerHTML = '';
 
             if(journalData.length === 0) {
-                wall.innerHTML = "<h3 style='width:100%;'>Belum ada titah yang diarsipkan.</h3>";
+                wall.innerHTML = "<h3 style='width:100%; opacity: 0.7;'>Belum ada titah yang diarsipkan.</h3>";
             } else {
                 const reversed = [...journalData].reverse();
-                reversed.forEach(entry => {
+                reversed.forEach((entry, index) => {
                     const env = document.createElement('div');
                     env.className = 'archive-envelope';
+                    // Staggering animation
+                    env.style.animation = `floatAvatar ${3 + (index%3)}s ease-in-out infinite`;
+                    env.style.animationDelay = `${index * 0.2}s`;
+                    
                     const emoji = entry.mood.split(' ')[0];
                     env.innerHTML = `<div class="env-mood">${emoji}</div><div class="env-date">${entry.date.split(',')[1]}</div>`;
                     env.onclick = () => openModal(entry);
@@ -654,11 +804,11 @@
         }
         function closeModal() { document.getElementById('archive-modal').classList.remove('active'); }
 
-        // === MINI GAME LOGIC (Hiburan Istana) ===
+        // === MINI GAME LOGIC ===
         let gameScore = 0;
         let gameTime = 15;
         let gameInterval, dropInterval;
-        const items = ['💎', '👑', '💍', '💰'];
+        const items = ['💎', '👑', '💍', '💰', '✨'];
 
         function openGame() { switchScreen('screen-game'); }
 
@@ -681,14 +831,24 @@
             const jewel = document.createElement('div');
             jewel.className = 'jewel';
             jewel.innerText = items[Math.floor(Math.random() * items.length)];
-            jewel.style.left = Math.random() * (area.clientWidth - 40) + 'px';
-            jewel.style.top = '-50px';
+            jewel.style.left = Math.random() * (area.clientWidth - 50) + 'px';
+            jewel.style.top = '-60px';
+            
+            // Random rotation
+            const rotateAngle = Math.random() * 360;
+            jewel.style.transform = `rotate(${rotateAngle}deg)`;
+            
             area.appendChild(jewel);
 
-            let posY = -50;
+            let posY = -60;
+            let currentRotation = rotateAngle;
+            
             const fall = setInterval(() => {
-                posY += 5;
+                posY += 6;
+                currentRotation += 2; // Memutar saat jatuh
                 jewel.style.top = posY + 'px';
+                jewel.style.transform = `rotate(${currentRotation}deg)`;
+                
                 if(posY > area.clientHeight) {
                     clearInterval(fall);
                     if(jewel.parentNode) jewel.remove();
@@ -699,7 +859,8 @@
                 gameScore += 10;
                 updateGameUI();
                 clearInterval(fall);
-                jewel.style.transform = 'scale(2)';
+                // Efek hancur/diambil
+                jewel.style.transform = `scale(2) rotate(${currentRotation + 45}deg)`;
                 jewel.style.opacity = '0';
                 setTimeout(() => { if(jewel.parentNode) jewel.remove(); }, 200);
             };
@@ -713,75 +874,10 @@
         function endGame() {
             clearInterval(gameInterval);
             clearInterval(dropInterval);
-            document.getElementById('game-area').innerHTML = `<h2 style="margin-top: 20vh;">Waktu Habis!<br>Skor: ${gameScore}</h2>`;
+            document.getElementById('game-area').innerHTML = `<div style="text-align:center; margin-top: 20vh; animation: pulseGlow 2s infinite;"><h2 style="font-size: 40px; margin-bottom: 10px;">Waktu Habis!</h2><h2 style="font-size: 50px; color: #fff;">Skor: ${gameScore}</h2></div>`;
             document.getElementById('btn-start-game').innerText = "Main Lagi";
             document.getElementById('btn-start-game').style.display = 'block';
         }
     </script>
 </body>
 </html>
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-            user-select: none; /* Mencegah seleksi teks yang tidak disengaja */
-        }
-
-        /* === 3D BRICK WALL BACKGROUND === */
-        body {
-            font-family: 'Cinzel', serif;
-            color: var(--royal-gold);
-            overflow: hidden;
-            height: 100vh;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            /* Dinding Bata Kerajaan */
-            background-color: #5e2c23;
-            background-image: 
-                linear-gradient(335deg, rgba(0,0,0,0.6) 2px, transparent 2px),
-                linear-gradient(155deg, rgba(0,0,0,0.6) 2px, transparent 2px),
-                linear-gradient(335deg, rgba(0,0,0,0.3) 1px, transparent 1px),
-                linear-gradient(155deg, rgba(0,0,0,0.3) 1px, transparent 1px);
-            background-size: 80px 40px, 80px 40px, 20px 20px, 20px 20px;
-            background-position: 0 0, 40px 20px, 0 0, 10px 10px;
-            box-shadow: inset 0 0 150px rgba(0,0,0,0.9); /* Efek vignette gelap ruangan istana */
-        }
-
-        h1, h2, h3 {
-            text-shadow: 2px 2px 4px rgba(0,0,0,0.8);
-            text-align: center;
-            margin-bottom: 20px;
-            letter-spacing: 2px;
-        }
-
-        /* === SPA SCREEN TRANSITIONS === */
-        .screen {
-            position: absolute;
-            top: 0; left: 0;
-            width: 100%; height: 100%;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            opacity: 0;
-            pointer-events: none;
-            transition: opacity 0.8s ease, transform 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            transform: translateZ(-500px) scale(0.8);
-            perspective: 1000px;
-        }
-
-        .screen.active {
-            opacity: 1;
-            pointer-events: auto;
-            transform: translateZ(0) scale(1);
-            z-index: 10;
-        }
-
-        /* === 3D BUTTONS === */
-        .btn-royal {
-            background: linear-gradient(to bottom, var(--royal-gold), var(--royal-gold-dark));
-            color: var(--royal-red-dark);
-            border: 2px solid #fff;
-            padding: 15px 30px;
-            font-
