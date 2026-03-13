@@ -3,412 +3,642 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ZenCampus | Hub Produktivitas & Mental Health</title>
+    <title>The Yellow Royal Diary - Jurnal Harian Yang Mulia</title>
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap');
-
-        /* --- COLOR PALETTE & VARIABLES --- */
+        /* ==============================
+           CSS - Styling & Animasi
+           ============================== */
         :root {
-            --bg-sand: #F4F1DE;
-            --card-light: #FDFCF8;
-            --sage-green: #A3B18A;
-            --sage-dark: #8A9A70;
-            --muted-navy: #264653;
-            --glass-bg: rgba(253, 252, 248, 0.65);
-            --shadow-soft: 0 8px 30px rgba(38, 70, 83, 0.06);
-            --radius-lg: 20px;
-            --radius-md: 12px;
-            --transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
-        }
-
-        /* --- GLOBAL RESET & TYPOGRAPHY --- */
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: 'Poppins', sans-serif;
+            --pastel-yellow: #FFF9E1;
+            --cream: #FFF3E0;
+            --gold: #FBC02D;
+            --maroon: #880E4F;
+            --text-color: #5D4037;
+            --font-main: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; /* Cute, clean font */
         }
 
         body {
-            background-color: var(--bg-sand);
-            color: var(--muted-navy);
-            line-height: 1.6;
-            padding-top: 80px; /* Space for fixed header */
+            margin: 0;
+            padding: 0;
+            background-color: var(--pastel-yellow);
+            font-family: var(--font-main);
+            color: var(--text-color);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            overflow-x: hidden;
         }
 
-        h1, h2, h3 {
-            font-weight: 600;
+        /* Container Utama */
+        #app-container {
+            width: 100%;
+            max-width: 480px; /* Mobile-first width */
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            position: relative;
+            background-color: white; /* Panel putih di dalam bg kuning */
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
         }
 
-        p {
-            font-weight: 300;
-        }
-
-        /* --- HEADER (GLASSMORPHISM) --- */
-        header {
-            position: fixed;
+        /* Global Styling untuk Section Halaman */
+        section {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100%;
+            padding: 2rem;
+            box-sizing: border-box;
+            position: absolute;
             top: 0;
             left: 0;
             width: 100%;
-            height: 70px;
-            background: var(--glass-bg);
-            backdrop-filter: blur(12px);
-            -webkit-backdrop-filter: blur(12px);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            z-index: 1000;
-            border-bottom: 1px solid rgba(163, 177, 138, 0.2);
-            box-shadow: 0 4px 10px rgba(0,0,0,0.02);
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.5s ease-in-out, visibility 0.5s;
+            text-align: center;
         }
 
-        header h1 {
-            color: var(--sage-dark);
-            font-size: 1.5rem;
-            letter-spacing: 1px;
+        /* Menampilkan section aktif */
+        section.active {
+            opacity: 1;
+            visibility: visible;
+            position: relative; /* Kembali ke flow normal */
         }
 
-        /* --- LAYOUT CONTAINER --- */
-        .container {
-            max-width: 600px;
-            margin: 0 auto;
-            padding: 20px;
-            display: flex;
-            flex-direction: column;
-            gap: 30px;
-        }
-
-        /* --- CARDS STYLING --- */
-        .card {
-            background-color: var(--card-light);
-            border-radius: var(--radius-lg);
-            padding: 25px;
-            box-shadow: var(--shadow-soft);
-            transition: var(--transition);
-        }
-
-        .card:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 12px 35px rgba(38, 70, 83, 0.1);
-        }
-
-        .card-header {
-            margin-bottom: 15px;
-        }
-
-        .card-header h2 {
-            font-size: 1.2rem;
-            color: var(--muted-navy);
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-
-        .card-header p {
-            font-size: 0.85rem;
-            opacity: 0.8;
-            margin-top: 5px;
-        }
-
-        /* --- BUTTONS & INPUTS --- */
+        /* Global Button Styling */
         button {
-            background-color: var(--sage-green);
-            color: var(--card-light);
-            border: none;
-            padding: 12px 20px;
-            border-radius: var(--radius-md);
-            font-weight: 500;
-            font-size: 0.95rem;
+            background-color: var(--gold);
+            color: var(--maroon);
+            border: 2px solid var(--maroon);
+            border-radius: 20px;
+            padding: 10px 25px;
+            font-size: 1.1rem;
+            font-weight: bold;
             cursor: pointer;
-            transition: var(--transition);
-            width: 100%;
+            transition: background-color 0.3s ease, transform 0.2s;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
         }
 
         button:hover {
-            background-color: var(--sage-dark);
-            box-shadow: 0 4px 15px rgba(163, 177, 138, 0.4);
-        }
-
-        input, select {
-            width: 100%;
-            padding: 12px 15px;
-            border: 2px solid transparent;
-            background-color: var(--bg-sand);
-            border-radius: var(--radius-md);
-            color: var(--muted-navy);
-            font-size: 0.9rem;
-            outline: none;
-            transition: var(--transition);
-            margin-bottom: 15px;
-        }
-
-        input:focus, select:focus {
-            border-color: var(--sage-green);
-            background-color: var(--card-light);
-        }
-
-        input::placeholder {
-            color: rgba(38, 70, 83, 0.4);
-        }
-
-        /* --- FEATURE 1: VIBE CHECK --- */
-        .emoji-grid {
-            display: flex;
-            justify-content: space-between;
-            gap: 10px;
-            margin-bottom: 15px;
-        }
-
-        .emoji-btn {
-            background-color: var(--bg-sand);
-            font-size: 1.8rem;
-            padding: 15px;
-            border-radius: var(--radius-lg);
-            transition: var(--transition);
-        }
-
-        .emoji-btn:hover {
-            background-color: var(--sage-green);
+            background-color: #fdd835;
             transform: scale(1.05);
         }
 
-        .vibe-message {
-            background-color: var(--bg-sand);
-            padding: 15px;
-            border-radius: var(--radius-md);
-            font-size: 0.9rem;
+        button:active {
+            transform: scale(0.98);
+        }
+
+        /* 1. Halaman Kedatangan (Landing) */
+        #landing-page {
+            background: linear-gradient(to bottom, #81D4FA, #B3E5FC); /* Langit biru cerah */
+        }
+
+        .castle-bg {
+            font-size: 5rem;
+            margin-bottom: 1rem;
+        }
+
+        #landing-page .parchment-box {
+            background-color: var(--cream);
+            border: 3px solid var(--gold);
+            border-radius: 15px;
+            padding: 2rem;
+            box-shadow: 0 6px 12px rgba(0,0,0,0.15);
+        }
+
+        #landing-page h1 {
+            color: var(--maroon);
+            margin-bottom: 1.5rem;
+            font-size: 1.8rem;
+        }
+
+        #name-input {
+            width: 80%;
+            padding: 12px;
+            border: 2px solid var(--gold);
+            border-radius: 10px;
+            margin-bottom: 1.5rem;
+            font-size: 1rem;
             text-align: center;
-            display: none; /* Hidden default */
-            animation: fadeIn 0.4s ease forwards;
-            border-left: 4px solid var(--sage-green);
+            background-color: white;
         }
 
-        /* --- FEATURE 2: SIDE-HUSTLE MATCHER --- */
-        .result-box {
-            margin-top: 15px;
-            background-color: var(--bg-sand);
-            padding: 15px;
-            border-radius: var(--radius-md);
-            font-size: 0.9rem;
-            display: none;
-            animation: fadeIn 0.4s ease forwards;
+        /* 2. Welcome Screen */
+        #welcome-page {
+            background-color: var(--pastel-yellow);
         }
 
-        .result-box strong {
-            color: var(--sage-dark);
+        /* Gerbang Terbuka Animation */
+        .gate-icon {
+            font-size: 6rem;
+            animation: openGate 2s ease-in-out forwards;
         }
 
-        /* --- FEATURE 3: STUDY PLANNER --- */
-        .planner-group {
+        @keyframes openGate {
+            0% { transform: scaleX(1); opacity: 0; }
+            50% { opacity: 1; }
+            100% { transform: scaleX(0); opacity: 0; visibility: hidden; }
+        }
+
+        #welcome-text {
+            font-size: 1.6rem;
+            color: var(--maroon);
+            font-weight: bold;
+            opacity: 0;
+            animation: fadeInText 1s ease-in-out 1.5s forwards; /* Muncul setelah gerbang mulai hilang */
+        }
+
+        @keyframes fadeInText {
+            to { opacity: 1; }
+        }
+
+        /* 3. Cek Suasana Hati (Mood Check) */
+        #mood-page {
+            background-color: var(--pastel-yellow);
+        }
+
+        .mood-options {
             display: flex;
-            gap: 10px;
-            margin-bottom: 15px;
+            gap: 1.5rem;
+            margin: 2rem 0;
         }
 
-        .planner-group input[type="text"] {
-            flex: 2;
-            margin-bottom: 0;
+        .mood-btn {
+            font-size: 3rem;
+            background: none;
+            border: none;
+            box-shadow: none;
+            padding: 0;
+            cursor: pointer;
+            transition: transform 0.2s;
         }
 
-        .planner-group input[type="number"] {
-            flex: 1;
-            margin-bottom: 0;
+        .mood-btn:hover {
+            background: none;
+            transform: scale(1.2);
         }
 
-        ul.schedule-list {
-            list-style: none;
-            margin-top: 15px;
+        #support-message {
+            font-style: italic;
+            color: var(--maroon);
+            margin-bottom: 2rem;
+            min-height: 1.2rem; /* Menjaga layout jika kosong */
+        }
+
+        /* Tombol 'Lanjut Menulis' */
+        #start-writing-btn {
+            display: none;
+        }
+
+        /* 4. Sesi Bercerita */
+        #journal-page {
+            background-color: var(--pastel-yellow);
+        }
+
+        #journal-page h2 {
+            margin-bottom: 1.5rem;
+            color: var(--maroon);
+        }
+
+        #journal-textarea {
+            width: 100%;
+            height: 250px;
+            background-color: var(--cream);
+            border: 3px solid var(--gold);
+            border-radius: 10px;
+            padding: 1rem;
+            font-size: 1rem;
+            color: var(--text-color);
+            box-sizing: border-box;
+            resize: none; /* User tidak bisa resize manual */
+            margin-bottom: 1.5rem;
+            font-family: var(--font-main);
+            box-shadow: inset 0 2px 4px rgba(0,0,0,0.05);
+        }
+
+        /* 5. Penyegelan Surat */
+        #sealing-page {
+            background-color: var(--pastel-yellow);
+        }
+
+        .envelope-icon {
+            font-size: 7rem;
+            margin-bottom: 1.5rem;
+            position: relative;
+        }
+
+        /* Wax Seal Animation */
+        .wax-seal {
+            width: 40px;
+            height: 40px;
+            background-color: var(--maroon);
+            border-radius: 50%;
+            border: 2px solid #6A1B4D;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%) scale(0);
+            box-shadow: 0 2px 4px rgba(0,0,0,0.3);
+            opacity: 0;
+        }
+
+        /* Class untuk trigger animasi via JS */
+        .sealing-animation .wax-seal {
+            animation: applySeal 1.5s ease-out forwards;
+        }
+
+        @keyframes applySeal {
+            0% { transform: translate(-50%, -50%) scale(5); opacity: 0; }
+            50% { transform: translate(-50%, -50%) scale(1); opacity: 1; }
+            100% { transform: translate(-50%, -50%) scale(1.1); opacity: 1; border-color: #B71C1C;} /* Efek stempel tekan */
+        }
+
+        .sealing-options {
             display: flex;
             flex-direction: column;
-            gap: 10px;
+            gap: 1rem;
+            width: 80%;
+            margin-top: 2rem;
+            opacity: 0;
+            animation: fadeInOptions 0.5s ease-in 1.5s forwards; /* Muncul setelah animasi stempel */
         }
 
-        ul.schedule-list li {
-            background-color: var(--bg-sand);
-            padding: 12px 15px;
-            border-radius: var(--radius-md);
+        @keyframes fadeInOptions {
+            to { opacity: 1; }
+        }
+
+        /* 6. Ruang Arsip Kerajaan */
+        #archive-page {
+            background-color: var(--pastel-yellow);
+            justify-content: flex-start; /* Start from top */
+            overflow-y: auto; /* Scrollable if long */
+        }
+
+        #archive-page h2 {
+            margin-top: 2rem;
+            margin-bottom: 1.5rem;
+            color: var(--maroon);
+        }
+
+        #archive-container {
+            width: 100%;
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .archive-item {
+            background-color: var(--cream);
+            border: 2px solid var(--gold);
+            border-radius: 15px;
+            padding: 1rem;
+            cursor: pointer;
+            transition: transform 0.2s, box-shadow 0.2s;
+            text-align: center;
+        }
+
+        .archive-item:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 5px 10px rgba(0,0,0,0.1);
+        }
+
+        .archive-date {
+            font-weight: bold;
             font-size: 0.9rem;
-            display: flex;
+            margin-bottom: 0.5rem;
+            color: var(--text-color);
+        }
+
+        .archive-mood {
+            font-size: 2rem;
+        }
+        
+        /* Modal for viewing details */
+        #archive-detail-modal {
+            display: none; /* Hidden by default */
+            position: fixed;
+            z-index: 100;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0,0,0,0.5); /* Semi-transparent background */
+            justify-content: center;
             align-items: center;
-            gap: 10px;
-            animation: fadeIn 0.3s ease;
         }
 
-        ul.schedule-list li.break-time {
-            background-color: rgba(163, 177, 138, 0.2);
-            color: var(--sage-dark);
-            font-style: italic;
+        #archive-detail-modal.show {
+            display: flex;
         }
 
-        /* --- ANIMATIONS --- */
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(5px); }
-            to { opacity: 1; transform: translateY(0); }
+        .modal-content {
+            background-color: var(--cream);
+            border: 3px solid var(--gold);
+            border-radius: 15px;
+            padding: 2rem;
+            width: 80%;
+            max-width: 400px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+            position: relative;
         }
 
-        /* Responsive Check */
-        @media (max-width: 480px) {
-            .planner-group {
-                flex-direction: column;
-            }
+        .close-modal {
+            color: var(--maroon);
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+            position: absolute;
+            top: 10px;
+            right: 15px;
+            cursor: pointer;
         }
+
+        #modal-date {
+            font-weight: bold;
+            margin-bottom: 0.5rem;
+        }
+        #modal-mood {
+            font-size: 2rem;
+            margin-bottom: 1rem;
+        }
+        #modal-content {
+            white-space: pre-wrap; /* Preserve line breaks */
+            text-align: left;
+            line-height: 1.5;
+        }
+
     </style>
 </head>
 <body>
 
-    <header>
-        <h1>🌱 ZenCampus</h1>
-    </header>
+    <div id="app-container">
 
-    <div class="container">
-        
-        <section class="card">
-            <div class="card-header">
-                <h2>Daily Vibe Check ✨</h2>
-                <p>Gimana perasaanmu hari ini? Jujur aja, nggak ada yang nilai kok.</p>
+        <section id="landing-page" class="active">
+            <div class="castle-bg">🏰</div>
+            <div class="parchment-box">
+                <h1>The Yellow Royal Diary</h1>
+                <p>Boleh kami tahu nama Yang Mulia?</p>
+                <input type="text" id="name-input" placeholder="Masukkan nama panggilanmu...">
+                <button onclick="enterRoyalCastle()">Masuk ke Istana</button>
             </div>
-            <div class="emoji-grid">
-                <button class="emoji-btn" onclick="checkVibe('senang')">😊</button>
-                <button class="emoji-btn" onclick="checkVibe('burnout')">😮‍💨</button>
-                <button class="emoji-btn" onclick="checkVibe('cemas')">😟</button>
-                <button class="emoji-btn" onclick="checkVibe('tidur')">😴</button>
-            </div>
-            <div id="vibeResponse" class="vibe-message"></div>
         </section>
 
-        <section class="card">
-            <div class="card-header">
-                <h2>Side-Hustle Matcher 💼</h2>
-                <p>Cari ide cuan tambahan yang *make sense* sama jurusan dan hobimu.</p>
-            </div>
-            <select id="fakultas">
-                <option value="" disabled selected>Pilih Fakultas / Rumpunmu...</option>
-                <option value="soshum">Sosial Humaniora (Soshum)</option>
-                <option value="saintek">Sains & Teknologi (Saintek)</option>
-                <option value="seni">Seni & Desain</option>
-            </select>
-            <input type="text" id="hobi" placeholder="Apa hobimu? (Misal: nulis, main game, ngedit)">
-            <button onclick="matchHustle()">Cari Cuan</button>
-            <div id="hustleResult" class="result-box"></div>
+        <section id="welcome-page">
+            <div class="gate-icon">🏯</div> <p id="welcome-text">Welcome home, Yang Mulia [Nama Pengguna]!</p>
         </section>
 
-        <section class="card">
-            <div class="card-header">
-                <h2>Anti-Burnout Planner 📝</h2>
-                <p>Belajar cerdas, bukan keras. Kita selipin waktu istirahat otomatis buatmu.</p>
+        <section id="mood-page">
+            <h2>Bagaimana Suasana Hati Yang Mulia Hari Ini?</h2>
+            <div class="mood-options">
+                <button class="mood-btn" onclick="selectMood('👑 Senang')">👑</button>
+                <button class="mood-btn" onclick="selectMood('🌤️ Biasa')">🌤️</button>
+                <button class="mood-btn" onclick="selectMood('🌧️ Sedih')">🌧️</button>
+                <button class="mood-btn" onclick="selectMood('🌪️ Marah')">🌪️</button>
             </div>
-            <div class="planner-group">
-                <input type="text" id="namaTugas" placeholder="Nama Tugas (ex: Jurnal, Koding)">
-                <input type="number" id="waktuTugas" placeholder="Est. Jam" min="0.5" step="0.5">
-            </div>
-            <button onclick="addSchedule()">Buat Jadwal Santai</button>
-            <ul id="scheduleList" class="schedule-list">
-                </ul>
+            <p id="support-message"></p>
+            <button id="start-writing-btn" onclick="goToJournaling()">Lanjut Menulis</button>
         </section>
+
+        <section id="journal-page">
+            <h2>Ceritakan cerita kamu hari ini...</h2>
+            <textarea id="journal-textarea" placeholder="Tuliskan titah atau keluh kesah Yang Mulia di sini..."></textarea>
+            <button onclick="sealJournal()">Done</button>
+        </section>
+
+        <section id="sealing-page">
+            <div class="envelope-icon">
+                ✉️
+                <div class="wax-seal"></div>
+            </div>
+            <h2>Surat Telah Disegel!</h2>
+            <div class="sealing-options">
+                <button onclick="resetForNewEntry()">Ada titah/cerita lain, Yang Mulia?</button>
+                <button onclick="goToArchive()">Pergi ke Ruang Arsip</button>
+            </div>
+        </section>
+
+        <section id="archive-page">
+            <h2>Ruang Arsip Kerajaan</h2>
+            <div id="archive-container">
+                </div>
+            <button onclick="resetForNewEntry()">Tulis Jurnal Baru</button>
+        </section>
+
+        <div id="archive-detail-modal">
+            <div class="modal-content">
+                <span class="close-modal" onclick="closeModal()">&times;</span>
+                <p id="modal-date"></p>
+                <p id="modal-mood"></p>
+                <p id="modal-content"></p>
+            </div>
+        </div>
 
     </div>
 
     <script>
-        // --- LOGIC 1: Daily Vibe Check ---
-        function checkVibe(mood) {
-            const responseBox = document.getElementById('vibeResponse');
+        /* ==============================
+           JavaScript - Fungsi & Logika
+           ============================== */
+
+        let userName = "";
+        let currentMood = "";
+        let journalEntries = [];
+
+        // Helper function to switch active section
+        function showSection(sectionId) {
+            // Hide all sections
+            document.querySelectorAll('section').forEach(section => {
+                section.classList.remove('active');
+            });
+            // Show target section
+            document.getElementById(sectionId).classList.add('active');
+        }
+
+        // Load data from LocalStorage on initial load
+        function loadJournalData() {
+            const storedEntries = localStorage.getItem('royalDiaryEntries');
+            if (storedEntries) {
+                journalEntries = JSON.parse(storedEntries);
+            }
+        }
+
+        // 1. Halaman Kedatangan (Landing) -> Masuk
+        function enterRoyalCastle() {
+            const nameInput = document.getElementById('name-input').value.trim();
+            if (nameInput) {
+                userName = nameInput;
+                // Update welcome text
+                document.getElementById('welcome-text').innerText = `Welcome home, Yang Mulia ${userName}!`;
+                
+                showSection('welcome-page');
+
+                // Otomatis pindah ke Mood Check setelah jeda 3 detik
+                setTimeout(() => {
+                    showSection('mood-page');
+                }, 3500); // 3.5 detik untuk animasi gerbang + jeda
+            } else {
+                alert("Mohon beritahu kami nama panggilan Yang Mulia agar kami bisa menyambut dengan layak.");
+            }
+        }
+
+        // 3. Cek Suasana Hati (Mood Check) -> Pilih Mood
+        function selectMood(mood) {
+            currentMood = mood;
+            const supportMessage = document.getElementById('support-message');
+            const startWritingBtn = document.getElementById('start-writing-btn');
+
             let message = "";
-
-            if (mood === 'senang') {
-                message = "Mantap! Jaga energi positifnya ya, tapi jangan lupa minum air putih dan *stay hydrated*.";
-            } else if (mood === 'burnout') {
-                message = "Tarik napas 5 detik... Hembuskan. Tinggalkan tugasmu sebentar, kamu berhak istirahat. Mau dengar lofi hip-hop?";
-            } else if (mood === 'cemas') {
-                message = "Nggak apa-apa merasa cemas. Peluk jauh buat kamu 🤗. Yuk, tutup layar sejenak dan jalan-jalan ambil angin segar.";
-            } else if (mood === 'tidur') {
-                message = "Kasur memanggil tuh! Jangan forsir dirimu. Tidur yang cukup itu investasi masa depan, lho. Yuk rebahan dulu.";
+            switch (mood) {
+                case '👑 Senang':
+                    message = "Luar biasa! Energi positif Yang Mulia mencerahkan seisi istana. Pertahankan, ya!";
+                    break;
+                case '🌤️ Biasa':
+                    message = "Ketenangan adalah sebuah kekuatan. Hari yang damai untuk hati yang bijak.";
+                    break;
+                case '🌧️ Sedih':
+                    message = "Jangan takut, Yang Mulia. Di sini aman. Biarkan kami menjaga perasaanmu.";
+                    break;
+                case '🌪️ Marah':
+                    message = "Biarkan kemarahan itu mengalir keluar di sini. Kami mendengarkan tanpa menghakimi.";
+                    break;
             }
-
-            responseBox.innerHTML = message;
-            responseBox.style.display = "block";
-            
-            // Re-trigger animation
-            responseBox.style.animation = 'none';
-            responseBox.offsetHeight; 
-            responseBox.style.animation = null;
+            supportMessage.innerText = message;
+            startWritingBtn.style.display = 'block'; // Show 'Lanjut Menulis' button
         }
 
-        // --- LOGIC 2: Side-Hustle Matcher ---
-        function matchHustle() {
-            const fakultas = document.getElementById('fakultas').value;
-            const hobi = document.getElementById('hobi').value.toLowerCase();
-            const resultBox = document.getElementById('hustleResult');
+        // 3. Mood Check -> Journaling
+        function goToJournaling() {
+            showSection('journal-page');
+        }
 
-            if (!fakultas) {
-                alert("Pilih fakultasnya dulu, ya!");
+        // 4. Sesi Bercerita -> Done (Trigger Animation & Save)
+        function sealJournal() {
+            const journalText = document.getElementById('journal-textarea').value.trim();
+            if (!journalText) {
+                alert("Jangan biarkan kertasnya kosong, Yang Mulia. Tuliskan sepatah dua patah kata hari ini.");
                 return;
             }
 
-            let role = "";
-            let tools = "";
+            // Save data to object
+            const today = new Date();
+            const dateString = `${today.getDate()} ${today.toLocaleString('id', { month: 'short' })} ${today.getFullYear()}`;
+            
+            const newEntry = {
+                date: dateString,
+                username: userName,
+                mood: currentMood,
+                content: journalText
+            };
 
-            if (fakultas === 'soshum') {
-                if (hobi.includes('nulis') || hobi.includes('baca')) {
-                    role = "AI Copywriter / Content Writer";
-                    tools = "Gemini, Notion, & Grammarly";
-                } else {
-                    role = "Social Media Manager / Virtual Assistant";
-                    tools = "Canva, Buffer, & Trello";
-                }
-            } else if (fakultas === 'saintek') {
-                if (hobi.includes('game') || hobi.includes('komputer')) {
-                    role = "Freelance Web Developer / Game Tester";
-                    tools = "VS Code, GitHub, & Figma";
-                } else {
-                    role = "Data Entry Specialist / Tech Tutor";
-                    tools = "Excel, Google Colab, & Discord";
-                }
-            } else if (fakultas === 'seni') {
-                role = "Digital Illustrator / UI/UX Enthusiast";
-                tools = "Figma, Procreate, atau Adobe Illustrator";
-            }
+            // Add to array and save to LocalStorage
+            journalEntries.push(newEntry);
+            localStorage.setItem('royalDiaryEntries', JSON.stringify(journalEntries));
 
-            resultBox.innerHTML = `Wah, keren! Dari profilmu, sepertinya kamu <strong>Cocok jadi: ${role}</strong>.<br><br>🛠️ Tools yang wajib dicoba: <strong>${tools}</strong>.`;
-            resultBox.style.display = "block";
+            // Show sealing page
+            showSection('sealing-page');
+            
+            // Add class to trigger CSS animation for the seal
+            const sealingSection = document.getElementById('sealing-page');
+            sealingSection.classList.add('sealing-animation');
+
+            // Resettextarea
+            document.getElementById('journal-textarea').value = "";
         }
 
-        // --- LOGIC 3: Anti-Burnout Study Planner ---
-        function addSchedule() {
-            const namaTugas = document.getElementById('namaTugas').value;
-            const waktuTugas = document.getElementById('waktuTugas').value;
-            const scheduleList = document.getElementById('scheduleList');
+        // 5. Penyegelan Surat -> Reset for New Entry
+        function resetForNewEntry() {
+            currentMood = "";
+            document.getElementById('support-message').innerText = "";
+            document.getElementById('start-writing-btn').style.display = 'none';
+            showSection('mood-page');
+        }
 
-            if (!namaTugas || !waktuTugas) {
-                alert("Isi nama tugas dan waktunya dulu, yuk!");
+        // 5. Penyegelan Surat -> Go to Archive
+        function goToArchive() {
+            populateArchiveList();
+            showSection('archive-page');
+        }
+
+        // 6. Ruang Arsip Kerajaan -> Populate List
+        function populateArchiveList() {
+            const container = document.getElementById('archive-container');
+            container.innerHTML = ""; // Clear existing
+
+            // Get entries from object (already loaded)
+            const entriesToDisplay = JSON.parse(localStorage.getItem('royalDiaryEntries')) || [];
+
+            if (entriesToDisplay.length === 0) {
+                container.innerHTML = "<p style='grid-column: span 2;'>Belum ada titah tertulis yang tersimpan di arsip.</p>";
                 return;
             }
 
-            // Task Item
-            const taskItem = document.createElement('li');
-            taskItem.innerHTML = `📚 <strong>${namaTugas}</strong> - Fokus selama ${waktuTugas} Jam`;
-            
-            // Break Item (Randomized for fun)
-            const breakItem = document.createElement('li');
-            breakItem.className = 'break-time';
-            
-            const breakIdeas = [
-                "Jeda Main Sosmed (15 Menit)",
-                "Stretching Time! Regangkan badanmu (10 Menit)",
-                "Bikin teh atau kopi hangat (15 Menit)",
-                "Pejamkan mata, dengar 3 lagu favorit (10 Menit)"
-            ];
-            const randomBreak = breakIdeas[Math.floor(Math.random() * breakIdeas.length)];
-            
-            breakItem.innerHTML = `🧘‍♀️ <em>${randomBreak}</em>`;
+            // Display backwards (most recent first)
+            for (let i = entriesToDisplay.length - 1; i >= 0; i--) {
+                const entry = entriesToDisplay[i];
+                
+                const archiveItem = document.createElement('div');
+                archiveItem.className = 'archive-item';
+                archiveItem.onclick = () => openArchiveDetail(entry); // Pass entry to detail function
 
-            // Append to list
-            scheduleList.appendChild(taskItem);
-            scheduleList.appendChild(breakItem);
+                const dateDiv = document.createElement('div');
+                dateDiv.className = 'archive-date';
+                dateDiv.innerText = entry.date;
 
-            // Clear inputs
-            document.getElementById('namaTugas').value = '';
-            document.getElementById('waktuTugas').value = '';
+                const moodDiv = document.createElement('div');
+                moodDiv.className = 'archive-mood';
+                moodDiv.innerText = entry.mood;
+
+                archiveItem.appendChild(dateDiv);
+                archiveItem.appendChild(moodDiv);
+                container.appendChild(archiveItem);
+            }
         }
+
+        // Modal functionality
+        function openArchiveDetail(entry) {
+            document.getElementById('modal-date').innerText = entry.date;
+            document.getElementById('modal-mood').innerText = entry.mood;
+            document.getElementById('modal-content').innerText = entry.content;
+            document.getElementById('archive-detail-modal').classList.add('show');
+        }
+
+        function closeModal() {
+            document.getElementById('archive-detail-modal').classList.remove('show');
+        }
+
+        // Close modal if user clicks outside the content area
+        window.onclick = function(event) {
+            const modal = document.getElementById('archive-detail-modal');
+            if (event.target == modal) {
+                closeModal();
+            }
+        }
+
+        // Initial Load: Check if name exists in LocalStorage from previous sessions (optional enhancement)
+        window.onload = function() {
+            loadJournalData();
+            
+            // Optional: Auto-fill name if it was stored before
+            const savedName = localStorage.getItem('royalDiaryUserName');
+            if (savedName) {
+                document.getElementById('name-input').value = savedName;
+            }
+        };
+
+        // When saving the name, also save to LocalStorage for persistence (optional enhancement)
+        const enterRoyalCastleOriginal = enterRoyalCastle;
+        enterRoyalCastle = function() {
+            enterRoyalCastleOriginal();
+            if(userName) {
+                 localStorage.setItem('royalDiaryUserName', userName);
+            }
+        };
+
     </script>
 </body>
 </html>
